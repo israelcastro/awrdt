@@ -1,79 +1,118 @@
-import {
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Input,
-  Button,
-  Icon,
-  useColorModeValue,
-  createIcon,
-  FormControl,
-  Checkbox,
-  FormLabel,
-  Link,
-} from '@chakra-ui/react';
+import { Box, Flex, Stack, Heading, Container, Button, SimpleGrid, Img } from '@chakra-ui/react';
+import { Input } from '../components/Form/Input';
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useContext, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+ 
+type SignInFormData = { 
+  email: string;
+  password: string;
+}
 
-export default function CardWithIllustration() {
+const SignInFormSchema = yup.object().shape({
+  email: yup.string().required('E-mail obrigatório').email('e-mail inválido'),
+  password: yup.string().required('Senha obrigatória'),
+})
+
+export default function SignIn() {
+  
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('');
+  
+  const { signIn } = useContext(AuthContext)
+
+
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(SignInFormSchema)
+  })
+
+  const handleSignIn: SubmitHandler<SignInFormData> = async (values, event) => {
+    event.preventDefault()
+
+    
+    const data = {
+      email,
+      password
+    }
+    console.log(data)
+
+    await signIn(data);
+    
+  }
+
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      py={12}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack
-        boxShadow={'2xl'}
-        bg={useColorModeValue('white', 'gray.700')}
-        rounded={'xl'}
-        p={10}
-        spacing={8}
-        align={'center'}>
-        <Stack align={'center'} spacing={2}>
-          <Heading
-            textTransform={'uppercase'}
-            fontSize={'3xl'}
-            color={useColorModeValue('gray.800', 'gray.200')}>
-            AWRDT
+    <Box position={'relative'} as="form" onSubmit={handleSubmit(handleSignIn)} bg="blue.600" height="100vh">
+      <Container
+        as={SimpleGrid}
+        maxW={'7xl'}
+        columns={{ base: 1, md: 2 }}
+        spacing={{ base: 10, lg: 32 }}
+        py={{ base: 10, sm: 20, lg: 32 }}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Flex flexDir="column" alignItems={{base : "center", md: "flex-start"}}>
+          <Img
+            src='/assets/logo_energisa.png'
+            alt="Energisa" 
+            position={'relative'}
+          />
+          <Heading 
+            size="2xl" 
+            lineHeight="shorter" 
+            mt={8} 
+            fontSize={{ base: '2xl', md: '4xl' }}
+          >
+            Faça o login para acessar o AWRDT
           </Heading>
-          <Text fontSize={'lg'} color={'gray.500'}>
-            Digite o usuário e senha para acessar o sistema
-          </Text>
+        </Flex>
+        
+        
+        <Stack
+          bg={'gray.50'}
+          rounded={'xl'}
+          p={{ base: 4, sm: 6, md: 8 }}
+          spacing={{ base: 8 }}
+          maxW={{ lg: 'lg' }}
+          shadow='md'
+        >
+          <Input
+            name="email"
+            type="email"
+            label="E-mail"
+            error={formState.errors.email}
+            {...register('email')}
+            value={email} 
+            onChange={e => setEmail(e.target.value)}                                    
+          />
+          <Input
+            name="password"
+            type="password"
+            label="Senha"
+            error={formState.errors.password}
+            {...register('password')} 
+            value={password} 
+            onChange={e => setPassword(e.target.value)}
+          />
+
+          <Button
+            type="submit"
+            mt="6"
+            colorScheme="blue"
+            size="lg"
+            isLoading={formState.isSubmitting}
+          >
+            Entrar
+          </Button>
+
         </Stack>
 
-        <Stack spacing={4} w={'full'}>
-            <FormControl id="email">
-              <FormLabel>E-mail</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Senha</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}>
-                <Checkbox>Lembrar de mim</Checkbox>
-                <Link color={'blue.400'}>Esqueceu a senha?</Link>
-              </Stack>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                rounded={'full'}
-                _hover={{
-                  bg: 'blue.500',
-                }}>
-                Sign in
-              </Button>
-            </Stack>
-          </Stack>
-
-
         
-      </Stack>
-    </Flex>
+      </Container>
+      
+    </Box>
   );
 }
 
