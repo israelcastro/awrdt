@@ -51,7 +51,7 @@ const Item = ({ tableConfig, line }) => {
                         if(tableHead[key]?.mobileBody){
                             return(
                                 <ListItem>
-                                    {tableHead[key].name + ': ' + line[key]}
+                                    {tableHead[key].name + ': ' + line[key]} 
                                 </ListItem>
                             )                                                                  
                         }
