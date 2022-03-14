@@ -34,7 +34,7 @@ export const customTheme = extendTheme({
     styles:{
         global:{
             body:{
-                bg: 'gray.100',
+                bg: 'white',
                 color: 'gray.800'
             }
         }
@@ -59,40 +59,53 @@ export const customTheme = extendTheme({
                 default: { fontSize: 'md'},
                 large: { fontSize: 'lg'},
             }
-        }
-    },
-    Button: {
-        defautlProps: { variant : 'primary' },
-        variants: {
-            primary : {
-                bg: 'blue.300',
-                border: '2px solid',
-                borderColor: 'blue.300',
-                color: 'white',
-                fontSize: 'md',
-                fontWeight: 'bold',
-                _hover: { bg: 'blue.500' },
-                _focus: { borderColor: 'blue.500', boxshadow: '0' },
-                _disabled: { borderColor : 'blue.200', bg: 'blue.200'},
-            },
-            outline : {
-                bg: 'transparent',
-                border: '2px solid',
-                borderColor: 'blue.300',
-                color: 'blue.300',
-                _hover: { borderColor: 'blue.500' },
-                _focus: { borderColor: 'blue.400', boxshadow: '0' },
-                _disabled: { borderColor : 'blue.200' },
-            },
-            link: {
-                bg: 'transparent',
-                border: '2px solid',
-                borderColor: 'transparent',
-                color: 'blue.300',
-                _hover: { color: 'blue.500', textDecor: 'none' },
-                _focus: { color: 'blue.400', boxshadow: '0' },
-                _disabled: { color : 'blue.200' },
+        },
+        Button: {
+            defaultProps: { variant : 'primary' },
+            variants: {
+                'primary' : {
+                    bg: 'blue.300',
+                    border: '2px solid',
+                    borderColor: 'blue.300',
+                    color: 'white',
+                    fontSize: 'md',
+                    fontWeight: 'bold',
+                    _hover: { bg: 'blue.500' },
+                    _focus: { borderColor: 'blue.500', boxshadow: '0' },
+                    _disabled: { borderColor : 'blue.200', bg: 'blue.200'},
+                },
+                'delete' : {
+                    bg: 'red.600',
+                    border: '2px solid',
+                    borderColor: 'red.600',
+                    color: 'white',
+                    fontSize: 'md',
+                    fontWeight: 'bold',
+                    _hover: { bg: 'red.500' },
+                    _focus: { borderColor: 'red.300', boxshadow: '0' },
+                    _disabled: { borderColor : 'red.200', bg: 'red.200'},
+                },
+                'outline' : {
+                    bg: 'transparent',
+                    border: '2px solid',
+                    borderColor: 'blue.300',
+                    color: 'blue.300',
+                    _hover: { borderColor: 'blue.500' },
+                    _focus: { borderColor: 'blue.400', boxshadow: '0' },
+                    _disabled: { borderColor : 'blue.200' },
+                },
+                'link': {
+                    bg: 'transparent',
+                    border: '2px solid',
+                    borderColor: 'transparent',
+                    color: 'blue.300',
+                    _hover: { color: 'blue.500', textDecor: 'none' },
+                    _focus: { color: 'blue.400', boxshadow: '0' },
+                    _disabled: { color : 'blue.200' },
+                }
             }
         }
-    }
+
+    },
+    
 })

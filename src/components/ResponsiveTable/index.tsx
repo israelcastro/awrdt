@@ -1,29 +1,77 @@
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList } from "@chakra-ui/react";
+import { CheckCircleIcon, EditIcon, NotAllowedIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
+import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton } from "@chakra-ui/react";
 
-const Head = ({ keys, tableConfig }) => {
+
+interface TableConfigProps {
+    head: Object
+}
+
+interface ResponsiveTableProps {
+    datas: Array<Object>, 
+    tableConfig: TableConfigProps, 
+    isWideVersion: boolean,
+    editFunction?: any,
+    deleteFunction?: any,
+    viewFunction?: any,
+}
+
+
+const Head = ({ keys, tableConfig, bolAction = true }) => {
     const tableHead = tableConfig?.head || {}
     return (
         <Thead>
             <Tr background={'#ccc'} color="black">
                 {
+<<<<<<< HEAD
                     keys.map( key => <Th key={key}>{ tableHead[key]?.name || key }</Th> )
                 }                                    
+=======
+                    keys.map( key => <Th textAlign="center" key={key}>{ tableHead[key]?.name || key }</Th> )
+                }
+                {bolAction && <Th textAlign="center">Ação</Th>}
+>>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
             </Tr>
         </Thead>
     )
 }
 
+<<<<<<< HEAD
 const Row = ({ line, tableConfig }) => {
     const keys = Object.keys(tableConfig?.head)
     return(
         <Tr key={line}>
             { keys.map(key => <Td key={key}>{ line[key] }</Td> ) }                         
+=======
+const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
+    const keys = Object.keys(tableConfig?.head)
+    return(
+        <Tr key={line}>
+            { keys.map(key =>
+                <Td textAlign="center" key={key}>
+                    { 
+                        typeof line[key] == "boolean" ? 
+                            (line[key] == true ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
+                            : (line[key])
+                    }
+                </Td>                 
+            ) }
+
+            
+            {bolAction && 
+                <Td textAlign="center"> 
+                    <HStack spacing={1} justifyContent="center">
+                        {editFunction && <IconButton onClick={editFunction} aria-label='Editar' icon={<EditIcon />} /> }
+                        {deleteFunction && <IconButton onClick={deleteFunction} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                        {viewFunction && <IconButton onClick={viewFunction} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                    </HStack>
+                </Td>
+            }                         
+>>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
         </Tr>
     ) 
 }
 
-const Item = ({ tableConfig, line }) => {
+const Item = ({ tableConfig, line, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
     const tableHead = tableConfig?.head || {}
     const keys = Object.keys(tableConfig?.head)
     let headItems = ''
@@ -32,54 +80,95 @@ const Item = ({ tableConfig, line }) => {
         <AccordionItem>
             <h2>
                 <AccordionButton>
-                    <Box flex='1' textAlign='left'>
+                    <HStack  flex='1' textAlign='left'>
                         { keys.map(key => {
                             if(tableHead[key]?.mobileHead){
-                                headItems += tableHead[key].name + ': ' + line[key]                                                                  
+                                return(
+                                    <Feature
+                                        title={tableHead[key].name}
+                                        desc={line[key]}
+                                    />
+                                )                                                                                                  
                             }
                         })}
-                        {headItems} 
-                    </Box>
+                        
+                    </HStack >
                     <AccordionIcon /> 
                 </AccordionButton>
             </h2>
-            <AccordionPanel pb={4}>
-                <UnorderedList>
+            <AccordionPanel pb={4} ml={8}>                
                     { keys.map(key => {
                         if(tableHead[key]?.mobileBody){
                             return(
-                                <ListItem>
-                                    {tableHead[key].name + ': ' + line[key]} 
-                                </ListItem>
+                                <SimpleGrid columns={2} >
+                                    <Box>                                        
+                                        <Heading fontSize='sm'>{tableHead[key].name + ': '}</Heading>
+                                    </Box>
+                                    <Box>
+                                        {
+                                            typeof line[key] == "boolean" ? 
+                                            (line[key] == true ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
+                                            : <Text>{line[key]}</Text>
+                                        }                                      
+                                    </Box>
+                                </SimpleGrid >
                             )                                                                  
                         }
                     })}
-                    
-                </UnorderedList>
+
+                    {bolAction && 
+                        <SimpleGrid columns={2} mt={10}>
+                            <Heading fontSize='sm'>Ações</Heading>
+                            <HStack spacing={1} justifyContent="center">
+                                {editFunction && <IconButton size="sm" onClick={editFunction} aria-label='Editar' icon={<EditIcon />} /> }
+                                {deleteFunction && <IconButton size="sm" onClick={deleteFunction} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {editFunction && <IconButton size="sm" onClick={viewFunction} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                            </HStack> 
+                        </SimpleGrid>
+                    } 
             </AccordionPanel>
         </AccordionItem>
     )
 }
 
+function Feature({ title, desc, ...rest }) {
+    return (
+      <Flex p={5} {...rest} flex={1} >
+        <Heading fontSize='md'>{title + ': '}</Heading>
+        <Text>{desc}</Text>
+      </Flex>
+    )
+  }
 
+<<<<<<< HEAD
 const ResponsiveTable = ({ datas, tableConfig, isWideVersion = true }) => {
     const keys = Object.keys(tableConfig?.head) 
     //const keys = ['id','last','name','Campo01','Campo02','Campo03']
+=======
+
+const ResponsiveTable 
+    = ({ datas, tableConfig, isWideVersion = true, editFunction, deleteFunction, viewFunction } : ResponsiveTableProps) => {
+    const keys = Object.keys(tableConfig?.head)  
+    const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
+>>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
     return(
         <>
             { isWideVersion && (
                 <Table variant='striped' colorScheme='blackAlpha'>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
+<<<<<<< HEAD
                         { datas.map(line => <Row line={line} tableConfig={tableConfig}/>) }                        
+=======
+                        { datas.map(line => <Row line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
+>>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
                     </Tbody>
                 </Table>
             )}
 
             { !isWideVersion && (
                 <Accordion allowToggle>
-                    { datas.map(line => <Item tableConfig={tableConfig} line={line}/> ) }                        
-                    
+                    { datas.map(line => <Item tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
                 </Accordion>
             )}
         </>
