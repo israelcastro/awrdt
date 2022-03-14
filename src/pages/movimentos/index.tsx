@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons'
-import { FormControl, Grid, GridItem, HStack, Input, Select, Stack } from '@chakra-ui/react'
+import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -13,107 +13,114 @@ import {
     Button,
     FormLabel
   } from '@chakra-ui/react'
-import { Item } from 'framer-motion/types/components/Reorder/Item'
+  import { EditIcon } from '@chakra-ui/icons'
+import axios from 'axios'
 
-const situacao = [
-    {id:0, valor: 'Novo'},
-    {id:1, valor: 'Cancelado'},
-    {id:2, valor: 'Em andamento'}
-]
-const valueTables = [
-   {
-    processo:1,
-    ocorrência: 90123456,
-    alimentador: 54564,
-    situacao: "Novo",
-    localidadade: "Cuiaba",
-    abertura: "10/12/2021",
-    ultimaAcao:"08/03/2022",
-    pop: "true",
-    bo: true,
-    condutor: true,
-    foto: false,
-    orcamento: false
-   },
-   {
-    processo:2,
-    ocorrência: 90123456,
-    alimentador: 54564,
-    situacao: "Cancelado",
-    localidadade: "Cuiaba",
-    abertura: "10/12/2021",
-    ultimaAcao:"08/03/2022",
-    pop: "false",
-    bo: false,
-    condutor: true,
-    foto: false,
-    orcamento: false
-   },
-   {
-    processo:3,
-    ocorrência: 90123456,
-    alimentador: 54564,
-    situacao: "Em andamento",
-    localidadade: "Cuiaba",
-    abertura: "10/12/2021",
-    ultimaAcao:"08/03/2022",
-    pop: "true",
-    bo: false,
-    condutor: false,
-    foto: true,
-    orcamento: true
-   }
-
-]
 export default function PainelDeProcessos(){
-    const [filtro, setFiltro] = useState(0);
-    const [tabelaValor, setTabelaValor] = useState(valueTables)
+    const baseUrl = "http://localhost:3333"
+    const [filtro, setFiltro] = useState('');
+    //const [valorSituacao, setvalorSituacao] = useState('');
+    //variavel de auxilio
+    const [data, setData] = useState([])
+    const [localidade, setlocalidade] = useState([]);
+    const [situacao, setsituacao] = useState([]);
+    const [tabelaValor, setTabelaValor] = useState([])
     console.log(filtro);
     
+    useEffect(() => {        
+        getProcesso()
+        getLocalidade()
+        getSituacao()
+    }, []);
+
+    const getProcesso = async()=>{
+        await axios.get(baseUrl+"/processos")
+        .then(response =>{
+            setData(response.data)
+            setTabelaValor(response.data)
+        }).catch(error=>{
+            console.log(error)
+        });
+    }
+    
+   const getLocalidade = async()=>{
+        await axios.get(baseUrl+"/localidades")
+        .then(response =>{
+            setlocalidade(response.data)
+        }).catch(error=>{
+            console.log(error)
+        })
+   }
+   const getSituacao = async()=>{
+       await axios.get(baseUrl+"/situacoes")
+       .then(response =>{
+           setsituacao(response.data)
+       }).catch(error=>{
+           console.log(error)
+       })
+   }
     function selectSituacao(e){
         console.log(e.target.value+ ">> dentro da função")
-        console.log(e.target)
-        /*if(e.target.value === 'Todas'){
-            return setTabelaValor(valueTables)
+        if(e.target.value === 'Todas'){
+            return getProcesso()
         }else{
-            
-            setTabelaValor(valueTables.filter(intem =>{
-                if(intem.situacao == e.target.value){
-                    return true
+            //Chamar o endPoint atualiza situação
+            //setupdateData(true)
+            setTabelaValor(data.filter((item, key) =>{
+                console.log(e.target.value+" <meu teste> "+ item.situacao)
+                if(e.target.value == item.situacao){
+                    return true;
                 }else{
-                    return false;                
-                }    
-            }))   
-        }*/
+                    return false;
+                }
+            }))
+        }        
     }
 
-   function handleClick (e) {
+    function selectLocalidade(e){
+        if(e.target.value === 'Todas'){
+            return setTabelaValor(data)
+        }else{
+            setTabelaValor(data.filter((item, key) =>{
+                if(e.target.value == item.localidadade ){
+                    return true;
+                }else{
+                    return false;
+                }
+            }))
+            //console.log(JSON.stringify(tabelaValor)+"<<<tabela")
+        }        
+    }
+
+    function filtroProcesso (e) {
         e.preventDefault();
-       
-        setTabelaValor(valueTables.filter(intem =>{
+
+        if(filtro == "" ){
+            return setTabelaValor(data)
+        }
+        setTabelaValor(data.filter(intem =>{
             if(intem.processo == filtro){
                 return true
             }else{
                 return false;                
             }    
-        }))  
-        console.log('Você clicou em enviar. =>'+ filtro )
-        
-   }
+        }))       
+        console.log('Você clicou em enviar. =>'+ filtro )        
+    }
 
     return(
         <>
         <Header />
-        <Navbar />        
-        <Stack direction={['column', 'row']} spacing='24px'>
-            
+        <Navbar />  
+              
+        <Stack direction={['column', 'row']} spacing='24px'>            
             <FormControl>            
                 <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
-                <Input id='processo' type='number' width={[2,4]}
+                <Input id='processo' type='number' width='auto'
                 value={filtro}
                 onChange = {(ev) => setFiltro(ev.target.value)}
                 />
-                <Button onClick={handleClick} colorScheme='teal' variant='outline' m='5px'>
+                <Button onClick={filtroProcesso} colorScheme='teal' variant='outline' m='5px'>
                     Buscar 
                 </Button> 
             </FormControl>
@@ -125,10 +132,10 @@ export default function PainelDeProcessos(){
                     id='situacao'
                     onChange={(e) => selectSituacao(e)}
                 >
-                    <option value='Todas'>Todas</option>
+                    <option value='Todas' selected>Todas</option>
                       {situacao.map((item) =>{
                         return(
-                            <option key={item.id} value={item.id}>{item.valor}</option>
+                            <option key={item.id} value={item.situacao}>{item.situacao}</option>
                         )
                     }
                     )}
@@ -137,11 +144,18 @@ export default function PainelDeProcessos(){
             <FormControl>
                 <FormLabel htmlFor='situacao'>Localidade</FormLabel>
                 <Select
-                bg='white'
-                borderColor='black'
-                id='localidade' placeholder='localidade' >
-                  
-                    <option value='option1'>Option 1</option>
+                    bg='white'
+                    borderColor='black'
+                    id='localidade'
+                    onChange={(e) => selectLocalidade(e)}
+                >
+                   <option value='Todas' selected>Todas</option>
+                    {localidade.map((item) =>{
+                        return(
+                            <option key={item.id} value={item.local}>{item.local}</option>
+                        )
+                      }
+                    )}
                 </Select>                                    
             </FormControl>
         </Stack>
@@ -149,9 +163,9 @@ export default function PainelDeProcessos(){
             <Table variant='striped' colorScheme='blackAlpha'>            
                 <Thead>
                     <Tr background={'#ccc'} color="black">
-                        <Th isNumeric>Processo</Th>
-                        <Th isNumeric>Ocorrência</Th>
-                        <Th isNumeric>Alimentador</Th>
+                        <Th >Processo</Th>
+                        <Th >Ocorrência</Th>
+                        <Th >Alimentador</Th>
                         <Th>Situação</Th>
                         <Th>Localidade</Th>
                         <Th>Abertura</Th>
@@ -161,15 +175,17 @@ export default function PainelDeProcessos(){
                         <Th>Condutor</Th>
                         <Th>Foto</Th>
                         <Th>Orçamento</Th>
+                        <Th>Ações</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
+                    
                     {tabelaValor.map(valueTable =>{
                         return(
                             <Tr border="1px solid" key= {valueTable.processo}>
-                                <Td isNumeric>{valueTable.processo}</Td>
-                                <Td isNumeric>{valueTable.ocorrência}</Td>
-                                <Td isNumeric>{valueTable.alimentador}</Td>
+                                <Td >{valueTable.processo}</Td>
+                                <Td >{valueTable.ocorrencia}</Td>
+                                <Td >{valueTable.alimentador}</Td>
                                 <Td>{valueTable.situacao}</Td>
                                 <Td>{valueTable.localidadade}</Td>
                                 <Td>{valueTable.abertura}</Td>
@@ -204,10 +220,26 @@ export default function PainelDeProcessos(){
                                         : <NotAllowedIcon color='red' />
                                     }
                                 </Td>
+                                <Td>
+                                    <IconButton
+                                        variant='solid'
+                                        colorScheme='orange'
+                                        aria-label='Send email'
+                                        icon={<EditIcon />}
+                                        />
+                                </Td>
                             </Tr>
                         );
-                    })}                 
+                    })}                                     
                 </Tbody>
+                {tabelaValor.length === 0 &&                       
+                    <Stack spacing={8}>
+                     <Alert status='error'>
+                       <AlertIcon />
+                       Não há resultados para o valor filtrado!
+                     </Alert>
+                    </Stack>
+                }
             </Table>
             
         </>
