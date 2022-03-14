@@ -318,7 +318,10 @@ import {
         },
         {
           label: 'Tipos de anexo do processo 4',
-          subLabel: 'Cadastro de tipos',
+
+
+
+subLabel: 'Cadastro de tipos',
           href: '#',
         },
       ],
@@ -327,24 +330,41 @@ import {
       label: 'Movimentos',
       children: [
         {
-          label: 'Job Board',
-          subLabel: 'Find your dream design job',
-          href: '#',
+          label: 'Acessar Painel de Processos',
+          subLabel: 'Veja as movimentações no processo',
+          href: 'movimentos',
         },
         {
-          label: 'Freelance Projects',
-          subLabel: 'An exclusive list for contract work',
+          label: 'Negociação de Dívida',
+          subLabel: 'Faça a negociação da dívida',
           href: '#',
         },
       ],
     },
     {
       label: 'Integrações',
-      href: '#',
+      children: [
+        {
+          label: 'Importações',
+          subLabel: 'Importar Ações de Cobrança',
+          href: '#'
+        },
+        {
+          label: "LOG's",
+          subLabel: 'Log de Importação de Ocorrência',
+          href: '#'
+        }
+      ]
     },
     {
       label: 'Consultas',
-      href: '#',
+      children:[
+        {
+          label: 'Diversos',
+          subLabel: 'Emitir Termo de Confissão de Dívida',
+          href: '#'
+        }
+      ]
     },
     {
       label: 'Segurança',

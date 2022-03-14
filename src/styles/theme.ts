@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme, useColorModeValue } from '@chakra-ui/react'
 
 export const theme = extendTheme({
     color: {
@@ -27,4 +27,13 @@ export const theme = extendTheme({
             }
         }
     }
+})
+
+export const body = extendTheme({
+    
+        minH: '100vh',
+        align: 'center',
+        justify: 'center',
+        py: 12
+     
 })
