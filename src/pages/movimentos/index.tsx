@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack } from '@chakra-ui/react'
+import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack, useBreakpointValue } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -15,6 +15,23 @@ import {
   } from '@chakra-ui/react'
   import { EditIcon } from '@chakra-ui/icons'
 import axios from 'axios'
+import ResponsiveTable from '../../components/ResponsiveTable'
+import { InputCustom } from '../../components/Form/Input'
+
+const table = [{
+        processo:'1',
+        ocorrencia: '90123456',
+        alimentador: '54564',
+        situacao: "Novo",
+        localidadade: "Cuiaba",
+        abertura: "10/12/2021",
+        ultimaAcao:"08/03/2022",
+        pop: "true",
+        bo: true,
+        condutor: true,
+        foto: false,
+        orcamento: false
+}]
 
 export default function PainelDeProcessos(){
     const baseUrl = "http://localhost:3333"
@@ -26,11 +43,16 @@ export default function PainelDeProcessos(){
     const [situacao, setsituacao] = useState([]);
     const [tabelaValor, setTabelaValor] = useState([])
     console.log(filtro);
-    
+    const isWideVersion = useBreakpointValue({
+        base: false,
+        lg: true
+    });
+
     useEffect(() => {        
         getProcesso()
         getLocalidade()
         getSituacao()
+        console.log(tabelaValor)
     }, []);
 
     const getProcesso = async()=>{
@@ -108,6 +130,30 @@ export default function PainelDeProcessos(){
         console.log('Você clicou em enviar. =>'+ filtro )        
     }
 
+    const tableConfig = {
+        head: {
+            processo: {
+                name: "Processo",
+                mobileHead: true
+            },
+
+            ocorrencia:{
+                name: "Ocorrência",
+                mobileHead: true,
+                mobileBody: true
+            },
+
+            alimentador:{
+                name: "Alimentador X",
+                mobileBody: true
+            },
+
+        }
+    };
+
+    function minhaFunc(){
+        return console.log("teste")
+    }
     return(
         <>
         <Header />
@@ -124,6 +170,12 @@ export default function PainelDeProcessos(){
                     Buscar 
                 </Button> 
             </FormControl>
+            <!-- <InputCustom 
+                name= "Buscar"
+                label="Buscar Processo"
+                type="number"
+                onChange= {(ev) => setFiltro(ev.target.value)}
+            /> 
             <FormControl>
                 <FormLabel htmlFor='situacao'>Situação</FormLabel>
                 <Select                
@@ -163,9 +215,9 @@ export default function PainelDeProcessos(){
             <Table variant='striped' colorScheme='blackAlpha'>            
                 <Thead>
                     <Tr background={'#ccc'} color="black">
-                        <Th >Processo</Th>
-                        <Th >Ocorrência</Th>
-                        <Th >Alimentador</Th>
+                        <Th>Processo</Th>
+                        <Th>Ocorrência</Th>
+                        <Th>Alimentador</Th>
                         <Th>Situação</Th>
                         <Th>Localidade</Th>
                         <Th>Abertura</Th>
@@ -241,6 +293,12 @@ export default function PainelDeProcessos(){
                     </Stack>
                 }
             </Table>
+            <ResponsiveTable 
+                datas={tabelaValor} 
+                tableConfig={tableConfig}
+                isWideVersion={isWideVersion} 
+                                           
+            />
             
         </>
     )    

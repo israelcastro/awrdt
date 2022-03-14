@@ -5,22 +5,20 @@ const Head = ({ keys, tableConfig }) => {
     const tableHead = tableConfig?.head || {}
     return (
         <Thead>
-            <Tr>
+            <Tr background={'#ccc'} color="black">
                 {
                     keys.map( key => <Th key={key}>{ tableHead[key]?.name || key }</Th> )
-                }
-                <Th></Th>                    
+                }                                    
             </Tr>
         </Thead>
     )
 }
 
-const Row = ({ line, tableConfig, func }) => {
+const Row = ({ line, tableConfig }) => {
     const keys = Object.keys(tableConfig?.head)
     return(
         <Tr key={line}>
-            { keys.map(key => <Td key={key}>{ line[key] }</Td> ) } 
-            <Td onClick={ () =>{ func(line) } }>Teste</Td>            
+            { keys.map(key => <Td key={key}>{ line[key] }</Td> ) }                         
         </Tr>
     ) 
 }
@@ -64,16 +62,16 @@ const Item = ({ tableConfig, line }) => {
 }
 
 
-const ResponsiveTable = ({ datas, tableConfig, isWideVersion = true, func }) => {
+const ResponsiveTable = ({ datas, tableConfig, isWideVersion = true }) => {
     const keys = Object.keys(tableConfig?.head) 
     //const keys = ['id','last','name','Campo01','Campo02','Campo03']
     return(
         <>
             { isWideVersion && (
-                <Table>
+                <Table variant='striped' colorScheme='blackAlpha'>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
-                        { datas.map(line => <Row func={func} line={line} tableConfig={tableConfig}/>) }                        
+                        { datas.map(line => <Row line={line} tableConfig={tableConfig}/>) }                        
                     </Tbody>
                 </Table>
             )}
