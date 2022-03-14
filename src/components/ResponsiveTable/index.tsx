@@ -22,26 +22,14 @@ const Head = ({ keys, tableConfig, bolAction = true }) => {
         <Thead>
             <Tr background={'#ccc'} color="black">
                 {
-<<<<<<< HEAD
-                    keys.map( key => <Th key={key}>{ tableHead[key]?.name || key }</Th> )
-                }                                    
-=======
                     keys.map( key => <Th textAlign="center" key={key}>{ tableHead[key]?.name || key }</Th> )
                 }
                 {bolAction && <Th textAlign="center">Ação</Th>}
->>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
             </Tr>
         </Thead>
     )
 }
 
-<<<<<<< HEAD
-const Row = ({ line, tableConfig }) => {
-    const keys = Object.keys(tableConfig?.head)
-    return(
-        <Tr key={line}>
-            { keys.map(key => <Td key={key}>{ line[key] }</Td> ) }                         
-=======
 const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
     const keys = Object.keys(tableConfig?.head)
     return(
@@ -66,7 +54,6 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
                     </HStack>
                 </Td>
             }                         
->>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
         </Tr>
     ) 
 }
@@ -140,28 +127,18 @@ function Feature({ title, desc, ...rest }) {
     )
   }
 
-<<<<<<< HEAD
-const ResponsiveTable = ({ datas, tableConfig, isWideVersion = true }) => {
-    const keys = Object.keys(tableConfig?.head) 
-    //const keys = ['id','last','name','Campo01','Campo02','Campo03']
-=======
 
 const ResponsiveTable 
     = ({ datas, tableConfig, isWideVersion = true, editFunction, deleteFunction, viewFunction } : ResponsiveTableProps) => {
     const keys = Object.keys(tableConfig?.head)  
     const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
->>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
     return(
         <>
             { isWideVersion && (
                 <Table variant='striped' colorScheme='blackAlpha'>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
-<<<<<<< HEAD
-                        { datas.map(line => <Row line={line} tableConfig={tableConfig}/>) }                        
-=======
                         { datas.map(line => <Row line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
->>>>>>> c10aca94ed8959f61b1be138a9cec94da256dcdf
                     </Tbody>
                 </Table>
             )}
