@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack } from '@chakra-ui/react'
+import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack, useBreakpointValue } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -15,6 +15,10 @@ import {
   } from '@chakra-ui/react'
   import { EditIcon } from '@chakra-ui/icons'
 import axios from 'axios'
+import ResponsiveTable from '../../components/ResponsiveTable'
+import Body from '../../components/Body'
+
+
 
 export default function PainelDeProcessos(){
     const baseUrl = "http://localhost:3333"
@@ -26,6 +30,11 @@ export default function PainelDeProcessos(){
     const [situacao, setsituacao] = useState([]);
     const [tabelaValor, setTabelaValor] = useState([])
     console.log(filtro);
+
+    const isWideVersion = useBreakpointValue({
+        base: false,
+        lg: true
+    });
     
     useEffect(() => {        
         getProcesso()
@@ -38,6 +47,7 @@ export default function PainelDeProcessos(){
         .then(response =>{
             setData(response.data)
             setTabelaValor(response.data)
+            console.log(tabelaValor)
         }).catch(error=>{
             console.log(error)
         });
@@ -108,140 +118,127 @@ export default function PainelDeProcessos(){
         console.log('Você clicou em enviar. =>'+ filtro )        
     }
 
+    function editFunction(){
+        console.log('Função criada para editar')
+    }
+
+    function deleteFunction() {
+        console.log('Função criada para deletar')
+    }
+
+    const tableConfig = {
+        head : {
+            processo: {
+                name: 'Processo',
+                mobileHead: true
+            },
+            ocorrencia: {
+                name: 'Ocorrência',
+                mobileBody: true
+            },
+            alimentador: {
+                name: 'Alimentador',
+                mobileBody: true
+            },
+            situacao: {
+                name: 'Situação',
+                mobileBody: true
+            },
+            localidadade: {
+                name: 'localidade',
+                mobileBody: true
+            },
+            abertura: {
+                name: 'Abertura',
+                mobileBody: true
+            },
+            ultimaAcao: {
+                name: 'Última ação',
+                mobileBody: true
+            },
+            pop: {
+                name: 'POP',
+                mobileBody: true
+            },
+            bo: {
+                name: 'B.O',
+                mobileBody: true
+            },
+            condutor: {
+                name: 'Condutor',
+                mobileBody: true
+            },
+            foto: {
+                name: 'Foto',
+                mobileBody: true
+            },
+            orcamento: {
+                name: 'Orçamento',
+                mobileBody: true
+            },
+            
+        }
+    }
+
     return(
         <>
-        <Header />
-        <Navbar />  
-              
-        <Stack direction={['column', 'row']} spacing='24px'>            
-            <FormControl>            
-                <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
-                <Input id='processo' type='number' width='auto'
-                value={filtro}
-                onChange = {(ev) => setFiltro(ev.target.value)}
+            <Header />
+            <Navbar />  
+            <Body>             
+                <Stack direction={['column', 'row']} spacing='24px'>            
+                    <FormControl>            
+                        <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
+                        <Input id='processo' type='number' width='auto'
+                        value={filtro}
+                        onChange = {(ev) => setFiltro(ev.target.value)}
+                        />
+                        <Button onClick={filtroProcesso} colorScheme='teal' variant='outline' m='5px'>
+                            Buscar 
+                        </Button> 
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor='situacao'>Situação</FormLabel>
+                        <Select                
+                            bg='white'
+                            borderColor='black'
+                            id='situacao'
+                            onChange={(e) => selectSituacao(e)}
+                        >
+                            <option value='Todas' selected>Todas</option>
+                            {situacao.map((item) =>{
+                                return(
+                                    <option key={item.id} value={item.situacao}>{item.situacao}</option>
+                                )
+                            }
+                            )}
+                        </Select>                                    
+                    </FormControl> 
+                    <FormControl>
+                        <FormLabel htmlFor='situacao'>Localidade</FormLabel>
+                        <Select
+                            bg='white'
+                            borderColor='black'
+                            id='localidade'
+                            onChange={(e) => selectLocalidade(e)}
+                        >
+                        <option value='Todas' selected>Todas</option>
+                            {localidade.map((item) =>{
+                                return(
+                                    <option key={item.id} value={item.local}>{item.local}</option>
+                                )
+                            }
+                            )}
+                        </Select>                                    
+                    </FormControl>
+                </Stack>
+                <ResponsiveTable 
+                    datas={tabelaValor} 
+                    tableConfig={tableConfig} 
+                    isWideVersion={isWideVersion}
+                    editFunction={editFunction}
+                    deleteFunction={deleteFunction}
                 />
-                <Button onClick={filtroProcesso} colorScheme='teal' variant='outline' m='5px'>
-                    Buscar 
-                </Button> 
-            </FormControl>
-            <FormControl>
-                <FormLabel htmlFor='situacao'>Situação</FormLabel>
-                <Select                
-                    bg='white'
-                    borderColor='black'
-                    id='situacao'
-                    onChange={(e) => selectSituacao(e)}
-                >
-                    <option value='Todas' selected>Todas</option>
-                      {situacao.map((item) =>{
-                        return(
-                            <option key={item.id} value={item.situacao}>{item.situacao}</option>
-                        )
-                    }
-                    )}
-                </Select>                                    
-            </FormControl> 
-            <FormControl>
-                <FormLabel htmlFor='situacao'>Localidade</FormLabel>
-                <Select
-                    bg='white'
-                    borderColor='black'
-                    id='localidade'
-                    onChange={(e) => selectLocalidade(e)}
-                >
-                   <option value='Todas' selected>Todas</option>
-                    {localidade.map((item) =>{
-                        return(
-                            <option key={item.id} value={item.local}>{item.local}</option>
-                        )
-                      }
-                    )}
-                </Select>                                    
-            </FormControl>
-        </Stack>
-        
-            <Table variant='striped' colorScheme='blackAlpha'>            
-                <Thead>
-                    <Tr background={'#ccc'} color="black">
-                        <Th >Processo</Th>
-                        <Th >Ocorrência</Th>
-                        <Th >Alimentador</Th>
-                        <Th>Situação</Th>
-                        <Th>Localidade</Th>
-                        <Th>Abertura</Th>
-                        <Th>Ultima Ação</Th>
-                        <Th> POP</Th>
-                        <Th> B.O</Th>
-                        <Th>Condutor</Th>
-                        <Th>Foto</Th>
-                        <Th>Orçamento</Th>
-                        <Th>Ações</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    
-                    {tabelaValor.map(valueTable =>{
-                        return(
-                            <Tr border="1px solid" key= {valueTable.processo}>
-                                <Td >{valueTable.processo}</Td>
-                                <Td >{valueTable.ocorrencia}</Td>
-                                <Td >{valueTable.alimentador}</Td>
-                                <Td>{valueTable.situacao}</Td>
-                                <Td>{valueTable.localidadade}</Td>
-                                <Td>{valueTable.abertura}</Td>
-                                <Td>{valueTable.ultimaAcao}</Td>
-                                <Td>
-                                    {valueTable.pop == "true"
-                                        ? <CheckCircleIcon color='green' />
-                                        : <NotAllowedIcon color='red' />
-                                    }
-                                </Td>
-                                <Td>
-                                    {valueTable.bo == true
-                                        ? <CheckCircleIcon color='green' />
-                                        : <NotAllowedIcon color='red' />
-                                    }
-                                </Td>
-                                <Td textAlign={"center"}>
-                                    {valueTable.condutor == true
-                                        ? <CheckCircleIcon color='green' />
-                                        : <NotAllowedIcon color='red' />
-                                    }
-                                </Td>
-                                <Td>
-                                    {valueTable.foto == true
-                                        ? <CheckCircleIcon color='green' />
-                                        : <NotAllowedIcon color='red' />
-                                    }
-                                </Td>
-                                <Td>
-                                    {valueTable.orcamento == true
-                                        ? <CheckCircleIcon color='green' />
-                                        : <NotAllowedIcon color='red' />
-                                    }
-                                </Td>
-                                <Td>
-                                    <IconButton
-                                        variant='solid'
-                                        colorScheme='orange'
-                                        aria-label='Send email'
-                                        icon={<EditIcon />}
-                                        />
-                                </Td>
-                            </Tr>
-                        );
-                    })}                                     
-                </Tbody>
-                {tabelaValor.length === 0 &&                       
-                    <Stack spacing={8}>
-                     <Alert status='error'>
-                       <AlertIcon />
-                       Não há resultados para o valor filtrado!
-                     </Alert>
-                    </Stack>
-                }
-            </Table>
-            
+            </Body>
         </>
     )    
 }
