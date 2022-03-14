@@ -24,7 +24,7 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
             <ChakraSelect 
                 name={name}
                 id={name}
-                placeholder="teste"
+                placeholder=""
                 focusBorderColor="blue.500"
                 borderColor="blue.300"
                 variant="filled"
@@ -48,4 +48,4 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
 
 }
 
-export const Select = forwardRef(SelectBase)
+export const SelectCustom = forwardRef(SelectBase)

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack, useBreakpointValue } from '@chakra-ui/react'
+import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Link, Select, Stack, useBreakpointValue } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -17,6 +17,7 @@ import {
 import axios from 'axios'
 import ResponsiveTable from '../../components/ResponsiveTable'
 import { InputCustom } from '../../components/Form/Input'
+import { SelectCustom } from '../../components/Form/Select'
 
 const table = [{
         processo:'1',
@@ -170,12 +171,19 @@ export default function PainelDeProcessos(){
                     Buscar 
                 </Button> 
             </FormControl>
-            <!-- <InputCustom 
+            {/*<InputCustom 
                 name= "Buscar"
                 label="Buscar Processo"
                 type="number"
                 onChange= {(ev) => setFiltro(ev.target.value)}
             /> 
+            <SelectCustom 
+                name="situacao"
+                label="Situação"
+                options={situacao}
+                onChange={(e) => selectSituacao(e)}
+            />
+            */}
             <FormControl>
                 <FormLabel htmlFor='situacao'>Situação</FormLabel>
                 <Select                
@@ -187,7 +195,7 @@ export default function PainelDeProcessos(){
                     <option value='Todas' selected>Todas</option>
                       {situacao.map((item) =>{
                         return(
-                            <option key={item.id} value={item.situacao}>{item.situacao}</option>
+                            <option key={item.id} value={item.value}>{item.value}</option>
                         )
                     }
                     )}
@@ -273,12 +281,20 @@ export default function PainelDeProcessos(){
                                     }
                                 </Td>
                                 <Td>
-                                    <IconButton
-                                        variant='solid'
-                                        colorScheme='orange'
-                                        aria-label='Send email'
-                                        icon={<EditIcon />}
+                                    <Link
+                                        p={2}
+                                        href={"recuperacao_despesas" ?? '#'}
+                                        fontSize={'sm'}
+                                        fontWeight={600}
+                                        color='teal.500'
+                                        >
+                                        <IconButton
+                                            variant='solid'
+                                            colorScheme='orange'
+                                            aria-label='Send email'
+                                            icon={<EditIcon />} 
                                         />
+                                    </Link>
                                 </Td>
                             </Tr>
                         );
