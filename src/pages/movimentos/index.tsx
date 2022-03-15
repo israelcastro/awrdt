@@ -17,6 +17,8 @@ import {
 import axios from 'axios'
 import ResponsiveTable from '../../components/ResponsiveTable'
 import Body from '../../components/Body'
+import { ProcessoService } from '../../services'
+import Router from 'next/router'
 
 
 
@@ -43,17 +45,22 @@ export default function PainelDeProcessos(){
     }, []);
 
     const getProcesso = async()=>{
-        await axios.get(baseUrl+"/processos")
-        .then(response =>{
-            setData(response.data)
-            setTabelaValor(response.data)
-            console.log(tabelaValor)
-        }).catch(error=>{
-            console.log(error)
-        });
+        
+        const response = await ProcessoService.listProcesses();
+        setData(response.data);
+        setTabelaValor(response.data); 
+        
+        // await axios.get(baseUrl+"/processos")
+        // .then(response =>{
+        //     setData(response.data)
+        //     setTabelaValor(response.data)
+        //     console.log(tabelaValor)
+        // }).catch(error=>{
+        //     console.log(error)
+        // });
     }
     
-   const getLocalidade = async()=>{
+   const getLocalidade = async()=> {
         await axios.get(baseUrl+"/localidades")
         .then(response =>{
             setlocalidade(response.data)
@@ -118,8 +125,12 @@ export default function PainelDeProcessos(){
         console.log('Você clicou em enviar. =>'+ filtro )        
     }
 
-    function editFunction(){
-        console.log('Função criada para editar')
+    function editFunction(id){
+        //console.log('Função criada para editar' + id)
+        Router.push({
+            pathname: '/movimentos/create',
+            query: { id: id },
+        })
     }
 
     function deleteFunction() {

@@ -41,16 +41,16 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
                             (line[key] == true ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
                             : (line[key])
                     }
-                </Td>                 
+                </Td>                                 
             ) }
 
             
             {bolAction && 
                 <Td textAlign="center"> 
                     <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton onClick={editFunction} aria-label='Editar' icon={<EditIcon />} /> }
-                        {deleteFunction && <IconButton onClick={deleteFunction} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                        {viewFunction && <IconButton onClick={viewFunction} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                        {editFunction && <IconButton onClick={() => editFunction(line.processo)} aria-label='Editar' icon={<EditIcon />} /> }
+                        {deleteFunction && <IconButton onClick={() => deleteFunction(line.processo)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                        {viewFunction && <IconButton onClick={() => viewFunction(line.processo)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                     </HStack>
                 </Td>
             }                         
@@ -107,9 +107,9 @@ const Item = ({ tableConfig, line, bolAction = true, editFunction, deleteFunctio
                         <SimpleGrid columns={2} mt={10}>
                             <Heading fontSize='sm'>Ações</Heading>
                             <HStack spacing={1} justifyContent="center">
-                                {editFunction && <IconButton size="sm" onClick={editFunction} aria-label='Editar' icon={<EditIcon />} /> }
-                                {deleteFunction && <IconButton size="sm" onClick={deleteFunction} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                                {editFunction && <IconButton size="sm" onClick={viewFunction} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                                {editFunction && <IconButton size="sm" onClick={() => editFunction(line.processo)} aria-label='Editar' icon={<EditIcon />} /> }
+                                {deleteFunction && <IconButton size="sm" onClick={() => deleteFunction(line.processo)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {editFunction && <IconButton size="sm" onClick={() => viewFunction(line.processo)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
                     } 
@@ -138,7 +138,7 @@ const ResponsiveTable
                 <Table variant='striped' colorScheme='blackAlpha'>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
-                        { datas.map(line => <Row line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
+                        { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
                     </Tbody>
                 </Table>
             )}

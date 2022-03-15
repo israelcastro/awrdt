@@ -1,11 +1,11 @@
 import {  createContext, ReactNode, useEffect, useState } from 'react'
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import  Router  from 'next/router'
-
-import { api } from '../services/apiClient';
+import { api } from '../services/base/apiClient';
 
 type User = {
     email: string;
+    name: string;
     permissions: string[];
     roles : string[];
 }
@@ -64,9 +64,9 @@ export function AuthProvider({ children }){
         if(token) {
             api.get('/me')
                 .then(response => {
-                    const { email, permissions, roles } = response.data
+                    const { email, name, permissions, roles } = response.data
 
-                    setUser({email, permissions, roles})
+                    setUser({email, name, permissions, roles})
                 })
                 .catch(error =>{
                     signOut();
@@ -81,7 +81,7 @@ export function AuthProvider({ children }){
                 password
             })
 
-            const { token, refreshToken, permissions, roles} = response.data;
+            const { token, refreshToken, permissions, roles, name} = response.data;
 
             // sessionStorage - se o usuário fecha o navegador e abre ele morre (dura apenas na sessão)
             // localStorage - mesmo reiniciando o pc, ele permanece, mas o next não é apenas browser pois é SSR, o servidor não tem acesso ao localstorage 
@@ -98,6 +98,7 @@ export function AuthProvider({ children }){
             
             setUser({
                 email,
+                name,
                 permissions,
                 roles,
             })
