@@ -1,5 +1,5 @@
 import { InputCustom } from '../../components/Form/Input'
-import { Divider, Stack, Text } from '@chakra-ui/react'
+import { Box, Divider, FormLabel, Stack, Text, Textarea } from '@chakra-ui/react'
 import { SelectCustom } from '../../components/Form/Select'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -8,6 +8,12 @@ export default function Processo(){
     const baseUrl = "http://localhost:3333"
     const [situacaoForm, setsituacaoForm] = useState([]);
     const [origem, setorigem] = useState([]);
+    let [value, setValue] = useState('')
+
+    let handleInputChange = (e) => {
+        let inputValue = e.target.value
+        setValue(inputValue)
+    }
 
     useEffect(() => {
         getSituacao()
@@ -101,6 +107,22 @@ export default function Processo(){
                     label="Endereço:"
                     type="text"                    
                 />  
+            </Stack>
+            <Stack direction={['column', 'row']} spacing='24px' mt={5}>
+                <div>
+
+                <FormLabel htmlFor='first-name'>Observação:</FormLabel>
+                </div>
+                
+               
+                    <Textarea
+                        value={value}
+                        onChange={handleInputChange}
+                        placeholder='Here is a sample placeholder'
+                        
+                    />    
+                
+                        
             </Stack>
         </>
     )

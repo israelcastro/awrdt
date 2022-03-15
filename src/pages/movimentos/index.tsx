@@ -118,8 +118,8 @@ export default function PainelDeProcessos(){
         console.log('Você clicou em enviar. =>'+ filtro )        
     }
 
-    function editFunction(){
-        console.log('Função criada para editar')
+    function editFunction(e){
+        console.log('Função criada para editar', e.target.value)
     }
 
     function deleteFunction() {
