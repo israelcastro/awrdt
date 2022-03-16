@@ -16,7 +16,6 @@ export default function Processo(){
 
     const router = useRouter()
     const [process, setProcess] = useState([]);
-    const [novaData, setnovaData] = useState('');
     useEffect(() => {
         const {id} = router.query 
         router.isReady && getProcesso(id) 
@@ -26,6 +25,7 @@ export default function Processo(){
 
     async function getProcesso(id){
         const response = await ProcessoService.getProcessById(id);
+        console.log(">>>>"+response.data)
         setProcess(response.data)
         //setnovaData(formatData(process['abertura']))
     }
@@ -39,9 +39,10 @@ export default function Processo(){
   
 
     const getSituacao = async()=>{
-        await axios.get(baseUrl+"/situacoesForm")
+        await axios.get(baseUrl+"/situacoes")
         .then(response =>{
             setsituacaoForm(response.data)
+            console.log("situação>>>"+response.data)
         }).catch(error=>{
             console.log(error)
         })
@@ -69,7 +70,7 @@ export default function Processo(){
                     label="Código:"
                     type="text"
                     isDisabled={true}
-                    value={process['id']}
+                    value={process['processo']}
                 />
                  <InputCustom 
                     name= "dataAbertura"
@@ -82,7 +83,7 @@ export default function Processo(){
                     name="situacaoFormulario"
                     label="Situação"                    
                     options={situacaoForm}
-                    valor={1}                  
+                    valor={3}                  
                 />
                 <InputCustom 
                     name= "ultimaAlteracao"
@@ -96,6 +97,7 @@ export default function Processo(){
                     name= "boletimOcorrencia"
                     label="Boletim Ocorrência:"
                     type="text"
+                    value={process['bo']}
                 />
                 <InputCustom 
                     name= "dataAberturaOcor"

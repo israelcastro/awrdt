@@ -37,13 +37,13 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
             >
                 
                 {
-                    options.map((option, index) => {
+                    options.map((option : any, index) => {
                         return(
-                            <option key={index} value={option.id}>{option.value}</option>
-                           /*{valor === option.id
+                            
+                           valor === option.id
                                 ? <option key={index} selected value={option.id}>{option.value}</option>
                                 : <option key={index} value={option.id}>{option.value}</option>
-                            }*/
+                            
                         )
                         
                     })
