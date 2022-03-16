@@ -19,18 +19,21 @@ import ResponsiveTable from '../../components/ResponsiveTable'
 import Body from '../../components/Body'
 import { ProcessoService } from '../../services'
 import Router from 'next/router'
+import Pagination from '../../components/Pagination'
 
-
+const LIMIT = 10;
 
 export default function PainelDeProcessos(){
     const baseUrl = "http://localhost:3333"
     const [filtro, setFiltro] = useState('');
+    const [offset, setOffset] = useState(0);
     //const [valorSituacao, setvalorSituacao] = useState('');
     //variavel de auxilio
     const [data, setData] = useState([])
     const [localidade, setlocalidade] = useState([]);
     const [situacao, setsituacao] = useState([]);
     const [tabelaValor, setTabelaValor] = useState([])
+    const [total, setTotal] = useState(0)
     console.log(filtro);
     const isWideVersion = useBreakpointValue({
         base: false,
@@ -42,13 +45,18 @@ export default function PainelDeProcessos(){
         getLocalidade()
         getSituacao()
         console.log(tabelaValor)
-    }, []);
+    }, [offset]);
 
     const getProcesso = async()=>{
         
-        const response = await ProcessoService.listProcesses();
-        setData(response.data);
-        setTabelaValor(response.data); 
+        const response = await ProcessoService.listProcesses(offset, LIMIT)
+        setData(response.data.results);
+        setTabelaValor(response.data.results);
+        setTotal(response.data.count)
+
+        console.log(response);
+
+        
         
         // await axios.get(baseUrl+"/processos")
         // .then(response =>{
@@ -249,6 +257,13 @@ export default function PainelDeProcessos(){
                     editFunction={editFunction}
                     deleteFunction={deleteFunction}
                 />
+
+                {tabelaValor && (
+                    <Pagination limit={LIMIT} total={total} offset={offset} setOffset={setOffset} />            
+                )}
+
+
+
             </Body>
         </>
     )    

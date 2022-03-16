@@ -48,9 +48,9 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
             {bolAction && 
                 <Td textAlign="center"> 
                     <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} /> }
-                        {deleteFunction && <IconButton onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                        {viewFunction && <IconButton onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
+                        {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
+                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
                     </HStack>
                 </Td>
             }                         
@@ -108,9 +108,9 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                         <SimpleGrid columns={2} mt={10}>
                             <Heading fontSize='sm'>Ações</Heading>
                             <HStack spacing={1} justifyContent="center">
-                                {editFunction && <IconButton size="sm" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} /> }
-                                {deleteFunction && <IconButton size="sm" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                                {viewFunction && <IconButton size="sm" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                                {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} /> }
+                                {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
                     } 
@@ -136,7 +136,7 @@ const ResponsiveTable
     return(
         <>
             { isWideVersion && (
-                <Table variant='striped' colorScheme='blackAlpha' mt={4}>
+                <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
                         { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        

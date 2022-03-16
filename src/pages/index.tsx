@@ -1,5 +1,5 @@
 import { Box, Flex, Stack, Heading, Container, Button, SimpleGrid, Img } from '@chakra-ui/react';
-import { Input } from '../components/Form/Input';
+import { InputCustom } from '../components/Form/Input';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -78,7 +78,7 @@ export default function SignIn() {
           maxW={{ lg: 'lg' }}
           shadow='md'
         >
-          <Input
+          <InputCustom
             name="email"
             type="email"
             label="E-mail"
@@ -87,7 +87,7 @@ export default function SignIn() {
             value={email} 
             onChange={e => setEmail(e.target.value)}                                    
           />
-          <Input
+          <InputCustom
             name="password"
             type="password"
             label="Senha"
@@ -100,7 +100,6 @@ export default function SignIn() {
           <Button
             type="submit"
             mt="6"
-            colorScheme="blue"
             size="lg"
             isLoading={formState.isSubmitting}
           >
