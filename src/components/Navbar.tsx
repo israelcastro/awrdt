@@ -29,8 +29,8 @@ import {
     return (
       <Box borderColor="gray.900">
         <Flex
-          bg={useColorModeValue('white', 'gray.800')}
-          color={useColorModeValue('gray.600', 'white')}
+          bg='gray.50'
+          color='gray.600'
           as="header"
           w="100%"
           h="20"

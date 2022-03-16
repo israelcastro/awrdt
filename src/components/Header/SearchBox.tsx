@@ -13,7 +13,7 @@ export function SearchBox() {
             alignSelf="center"
             color="gray.600"
             position="relative"
-            bg="gray.300"
+            bg="gray.100"
             borderRadius="full"
         >
             <Input

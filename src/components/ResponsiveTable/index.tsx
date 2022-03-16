@@ -32,7 +32,7 @@ const Head = ({ keys, tableConfig, bolAction = true }) => {
 
 const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
     const keys = Object.keys(tableConfig?.head)
-    return(
+    return(        
         <Tr key={line}>
             { keys.map(key =>
                 <Td textAlign="center" key={key}>
@@ -48,9 +48,9 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
             {bolAction && 
                 <Td textAlign="center"> 
                     <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton onClick={() => editFunction(line.processo)} aria-label='Editar' icon={<EditIcon />} /> }
-                        {deleteFunction && <IconButton onClick={() => deleteFunction(line.processo)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                        {viewFunction && <IconButton onClick={() => viewFunction(line.processo)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
+                        {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
+                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
                     </HStack>
                 </Td>
             }                         
@@ -58,20 +58,21 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
     ) 
 }
 
-const Item = ({ tableConfig, line, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
+const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, deleteFunction, viewFunction }) => {
     const tableHead = tableConfig?.head || {}
     const keys = Object.keys(tableConfig?.head)
     let headItems = ''
     let bodyItems = ''
     return (
-        <AccordionItem>
+        <AccordionItem bg={bgColor}>
             <h2>
-                <AccordionButton>
+                <AccordionButton _expanded={{ bg: 'blue.600', color: 'white' }}>
                     <HStack  flex='1' textAlign='left'>
-                        { keys.map(key => {
+                        { keys.map( (key, i) => {
                             if(tableHead[key]?.mobileHead){
                                 return(
                                     <Feature
+                                        key={i}
                                         title={tableHead[key].name}
                                         desc={line[key]}
                                     />
@@ -83,11 +84,11 @@ const Item = ({ tableConfig, line, bolAction = true, editFunction, deleteFunctio
                     <AccordionIcon /> 
                 </AccordionButton>
             </h2>
-            <AccordionPanel pb={4} ml={8}>                
-                    { keys.map(key => {
+            <AccordionPanel pb={4} ml={8} mt={2}>                
+                    { keys.map( (key,i) => {
                         if(tableHead[key]?.mobileBody){
                             return(
-                                <SimpleGrid columns={2} >
+                                <SimpleGrid columns={2} key={i}>
                                     <Box>                                        
                                         <Heading fontSize='sm'>{tableHead[key].name + ': '}</Heading>
                                     </Box>
@@ -107,9 +108,9 @@ const Item = ({ tableConfig, line, bolAction = true, editFunction, deleteFunctio
                         <SimpleGrid columns={2} mt={10}>
                             <Heading fontSize='sm'>Ações</Heading>
                             <HStack spacing={1} justifyContent="center">
-                                {editFunction && <IconButton size="sm" onClick={() => editFunction(line.processo)} aria-label='Editar' icon={<EditIcon />} /> }
-                                {deleteFunction && <IconButton size="sm" onClick={() => deleteFunction(line.processo)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                                {editFunction && <IconButton size="sm" onClick={() => viewFunction(line.processo)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                                {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} /> }
+                                {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
                     } 
@@ -135,7 +136,7 @@ const ResponsiveTable
     return(
         <>
             { isWideVersion && (
-                <Table variant='striped' colorScheme='blackAlpha'>
+                <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
                         { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
@@ -144,8 +145,8 @@ const ResponsiveTable
             )}
 
             { !isWideVersion && (
-                <Accordion allowToggle>
-                    { datas.map(line => <Item tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
+                <Accordion allowToggle mt={4}>
+                    { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
                 </Accordion>
             )}
         </>
