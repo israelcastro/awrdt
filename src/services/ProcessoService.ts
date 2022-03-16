@@ -9,6 +9,7 @@ class ProcessoService {
         return api.get(`/processos/${id}`)        
     }    
     
+    
 }
 
 export default new ProcessoService();

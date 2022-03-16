@@ -127,8 +127,12 @@ export default function PainelDeProcessos(){
 
     function editFunction(id){
         //console.log('Função criada para editar' + id)
-        Router.push({
+       /* Router.push({
             pathname: '/movimentos/create',
+            query: { id: id },
+        })*/
+        Router.push({
+            pathname: '/recuperacao_despesas',
             query: { id: id },
         })
     }
@@ -218,7 +222,7 @@ export default function PainelDeProcessos(){
                             <option value='Todas' selected>Todas</option>
                             {situacao.map((item) =>{
                                 return(
-                                    <option key={item.id} value={item.situacao}>{item.situacao}</option>
+                                    <option key={item.id} value={item.value}>{item.value}</option>
                                 )
                             }
                             )}

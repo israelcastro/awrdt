@@ -13,11 +13,12 @@ interface SelectProps extends ChakraSelectProps {
     placeholder?: string;
     error?: FieldError;
     options?: OptionsProps[];
+    valor?: number;
 }
 
 
 const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps> 
-    = ({ name, label, options = [], error = null, ...rest }, ref) => {
+    = ({ name, label, options = [], valor, error = null, ...rest }, ref) => {
     return(
         <FormControl isInvalid={!!error}>          
             { !!label && <FormLabel htmlFor={name} fontWeight="normal">{label}</FormLabel> }
@@ -37,9 +38,14 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
                 
                 {
                     options.map((option, index) => {
-                        return (
+                        return(
                             <option key={index} value={option.id}>{option.value}</option>
+                           /*{valor === option.id
+                                ? <option key={index} selected value={option.id}>{option.value}</option>
+                                : <option key={index} value={option.id}>{option.value}</option>
+                            }*/
                         )
+                        
                     })
                 }
             </ChakraSelect>

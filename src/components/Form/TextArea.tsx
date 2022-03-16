@@ -1,19 +1,19 @@
 import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from 'react-hook-form'
-import { FormControl, FormErrorMessage, FormLabel, Input as ChakraInput, InputProps as ChakraInputProps } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Textarea as ChakraTextarea, TextareaProps as ChakraTextareaProps } from "@chakra-ui/react";
 
-interface InputProps extends ChakraInputProps {
+interface TextareaProps extends ChakraTextareaProps {
     name: string;
     label?: string;
     error?: FieldError
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement,InputProps> 
+const TextareaBase: ForwardRefRenderFunction<HTMLInputElement,TextareaProps> 
     = ({ name, label, error = null, ...rest }, ref) => {
     return(
     <FormControl isInvalid={!!error}>          
         { !!label && <FormLabel fontWeight="normal" htmlFor={name}>{label}</FormLabel> }
-        <ChakraInput
+        <ChakraTextarea
             name={name}
             id={name}
             focusBorderColor="blue.500"
@@ -23,7 +23,6 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement,InputProps>
                 bgColor: 'blue.100'}}
             _disabled={{bgColor:'gray.300'}}
             size="lg"
-            ref={ref}
             {...rest}
         />
         { !!error && (
@@ -35,4 +34,4 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement,InputProps>
     )
 }
 
-export const InputCustom = forwardRef(InputBase)
+export const TextareaCustom = forwardRef(TextareaBase)

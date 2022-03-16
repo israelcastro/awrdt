@@ -4,7 +4,8 @@ import { Header } from "../components/Header";
 import Navbar from "../components/Navbar";
 import { AuthContext } from "../contexts/AuthContext";
 import { useCan } from "../hooks/useCan";
-import { api } from "../services/apiClient";
+import { api } from "../services/base/apiClient";
+
 
 export default function Dashboard(){
     const { user, signOut } = useContext(AuthContext)
