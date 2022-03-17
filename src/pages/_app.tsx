@@ -5,11 +5,13 @@ import { AuthProvider } from '../contexts/AuthContext'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    
       <ChakraProvider theme={customTheme}>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </ChakraProvider>
-    </AuthProvider>
+    
   )
 }
 
