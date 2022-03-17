@@ -8,6 +8,14 @@ class ProcessoService {
     getProcessById(id) {
         return api.get(`/processos/${id}`)        
     }
+
+    getSituacoes(){
+        return api.get(`/situacoes`)
+    }
+
+    getOrigens(){
+        return api.get(`/origens`)
+    }
     
     
 }

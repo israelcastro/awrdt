@@ -1,15 +1,13 @@
 import { InputCustom } from '../../components/Form/Input'
-import { Box, Divider, FormLabel, Stack, Text, Textarea } from '@chakra-ui/react'
+import { Divider,  Stack, Text } from '@chakra-ui/react'
 import { SelectCustom } from '../../components/Form/Select'
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ProcessoService } from '../../services';
 import FormatDados from "../../FormatDados"
 import { TextareaCustom } from '../../components/Form/TextArea';
 
 export default function Processo(){
-    const baseUrl = "http://localhost:3333"
     const [situacaoForm, setsituacaoForm] = useState([]);
     const [origem, setorigem] = useState([]);
     let [value, setValue] = useState('')
@@ -30,34 +28,19 @@ export default function Processo(){
         //setnovaData(formatData(process['abertura']))
     }
 
-
+    async function getSituacao(){
+        const response = await ProcessoService.getSituacoes();
+        setsituacaoForm(response.data)
+    }
+    async function getOrigem(){
+        const response = await ProcessoService.getOrigens();
+        setorigem(response.data)
+    }
+    
     let handleInputChange = (e) => {
         let inputValue = e.target.value
         setValue(inputValue)
-    }
-
-  
-
-    const getSituacao = async()=>{
-        await axios.get(baseUrl+"/situacoes")
-        .then(response =>{
-            setsituacaoForm(response.data)
-            console.log("situação>>>"+response.data)
-        }).catch(error=>{
-            console.log(error)
-        })
-    }
-
-    const getOrigem = async()=>{
-        await axios.get(baseUrl+"/origens")
-        .then(response =>{
-            setorigem(response.data)
-        }).catch(error=>{
-            console.log(error)
-        })
-    }
-
-   
+    }   
 
     return (
         <>
@@ -103,16 +86,19 @@ export default function Processo(){
                     name= "dataAberturaOcor"
                     label="Data de Abertura:"
                     type="date"
+                    value={FormatDados.data(process['abertura'])}
                 />
                 <SelectCustom 
                     name="oriegem"
                     label="Origem:"
                     options={origem}
+                    valor={process['origem']}
                 />
                 <InputCustom 
                     name= "usuarioAlteracao"
                     label="Usuário Ultima Alteração:"
                     type="text"
+                    value={process['ultimoAtualizar']}
                 />
             </Stack>
             <Stack direction={['column', 'row']} spacing='24px' mt={5}>
@@ -120,20 +106,22 @@ export default function Processo(){
                     name= "responsavel"
                     label="Responsável:"
                     type="text"
-                    
+                    value={process['responsavel']}
                 />
                 <InputCustom 
                     name= "idPost"
                     label="ID Poste:"
                     type="text"
                     width={'auto'}
+                    value={'2102054'}
                 />
             </Stack>
             <Stack direction={['column', 'row']} spacing='24px' mt={5}>
                 <InputCustom 
                     name= "endereco"
                     label="Endereço:"
-                    type="text"                    
+                    type="text"
+                    value="Rua Maria Rosa, 120"                    
                 />  
             </Stack>
             <Stack direction={['column', 'row']} spacing='24px' mt={5}>
@@ -142,7 +130,8 @@ export default function Processo(){
                 <TextareaCustom    
                     name="observacao"
                     label="Observação"                 
-                    bgColor='gray.200'                  
+                    bgColor='gray.200'
+                    value="Lorem Ipsum is simply dummy text of the printing and typesetting industry."                 
                 />      
             </Stack>
 
@@ -155,7 +144,7 @@ export default function Processo(){
                     type="text"
                     isDisabled={true}
                                         
-                    value={process['ocorrencia']}
+                    value={process['codigoOcorrencia']}
                 />
                 <InputCustom 
                     name= "ocorrenciaAbertura"
@@ -213,7 +202,7 @@ export default function Processo(){
                     label="Alimentador:"
                     type="text"
                     isDisabled={true}
-                    value={process['ocorrencia']}
+                    value={process['alimentador']}
                 />  
                 <InputCustom 
                     name= "ocorrenciaUC"
@@ -236,7 +225,7 @@ export default function Processo(){
                     label="Localidade:"
                     type="text"
                     isDisabled={true}
-                    value={process['ocorrencia']}
+                    value={process['localidade']}
                 /><InputCustom 
                     name= "ocorrenciaSubestacao"
                     label="Subestação:"
@@ -265,7 +254,7 @@ export default function Processo(){
                     name= "modelo"
                     label="Modelo:"
                     type="text"
-                    value={FormatDados.data(process['abertura'])}
+                    value={process['modelo']}
                 />               
             </Stack>
             <Stack direction={['column', 'row']} spacing='24px' mt={5}>
@@ -273,7 +262,7 @@ export default function Processo(){
                     name= "condutor"
                     label="Condutor:"
                     type="text"
-                    value={'teste'}
+                    value={process['condutor']}
                 /><InputCustom 
                     name= "documento"
                     label="Documento (RG/CPF):"
@@ -292,7 +281,7 @@ export default function Processo(){
                     name= "endereco"
                     label="Endereço:"
                     type="text"
-                    value={process['ocorrencia']}
+                    value={process['localidadade']}
                 /><InputCustom 
                     name= "cidade"
                     label="Cidade:"
@@ -303,13 +292,12 @@ export default function Processo(){
                     name= "uf"
                     label="UF (referência):"
                     type="text"
-                    value={process['ocorrencia']}
+                    value={process['uf']}
                 /> 
                 <InputCustom 
                     name= "cep"
                     label="CEP:"
                     type="text"
-                    isDisabled={true}
                     value={process['ocorrencia']}
                 /> 
             </Stack>           
