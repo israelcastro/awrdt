@@ -9,7 +9,6 @@ import Body from '../../components/Body'
 import { ProcessoService } from '../../services'
 import Router from 'next/router'
 import Pagination from '../../components/Pagination'
-import AlertCustom from '../../components/AlertCustom'
 import { AuthContext } from '../../contexts/AuthContext'
 
 const LIMIT = 10;
