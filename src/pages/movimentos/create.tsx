@@ -14,7 +14,6 @@ export default function CreateProcesso(){
 
     async function getProcesso(id) {
         const response = await ProcessoService.getProcessById(id);
-        console.log(response)
         setProcess(response.data)
     }
     

@@ -1,5 +1,7 @@
 import { CheckCircleIcon, EditIcon, NotAllowedIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
-import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton } from "@chakra-ui/react";
+import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import AlertCustom from "../AlertCustom";
 
 
 interface TableConfigProps {
@@ -13,6 +15,8 @@ interface ResponsiveTableProps {
     editFunction?: any,
     deleteFunction?: any,
     viewFunction?: any,
+    fieldBody : string,
+    toast? : any,
 }
 
 
@@ -30,15 +34,15 @@ const Head = ({ keys, tableConfig, bolAction = true }) => {
     )
 }
 
-const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction, viewFunction }) => {
+const Row = ({ line, tableConfig, bolAction = true, editFunction, modalDelete, deleteFunction, viewFunction }) => {
     const keys = Object.keys(tableConfig?.head)
     return(        
         <Tr key={line}>
             { keys.map(key =>
                 <Td textAlign="center" key={key}>
                     { 
-                        typeof line[key] == "boolean" ? 
-                            (line[key] == true ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
+                        typeof line[key] == "boolean" || tableConfig?.head[key].isBoolean  ? 
+                            (line[key] == true || line[key] ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
                             : (line[key])
                     }
                 </Td>                                 
@@ -48,9 +52,9 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
             {bolAction && 
                 <Td textAlign="center"> 
                     <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
-                        {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
-                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
+                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
+                        {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
+                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
                     </HStack>
                 </Td>
             }                         
@@ -58,7 +62,7 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, deleteFunction
     ) 
 }
 
-const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, deleteFunction, viewFunction }) => {
+const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, deleteFunction, viewFunction, modalDelete }) => {
     const tableHead = tableConfig?.head || {}
     const keys = Object.keys(tableConfig?.head)
     let headItems = ''
@@ -94,8 +98,8 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                                     </Box>
                                     <Box>
                                         {
-                                            typeof line[key] == "boolean" ? 
-                                            (line[key] == true ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
+                                            typeof line[key] == "boolean" || tableConfig?.head[key].isBoolean ? 
+                                            (line[key] == true || line[key] ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
                                             : <Text>{line[key]}</Text>
                                         }                                      
                                     </Box>
@@ -108,9 +112,9 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                         <SimpleGrid columns={2} mt={10}>
                             <Heading fontSize='sm'>Ações</Heading>
                             <HStack spacing={1} justifyContent="center">
-                                {editFunction && <IconButton size="xs" onClick={() => editFunction(line.id)} aria-label='Editar' icon={<EditIcon />} /> }
-                                {deleteFunction && <IconButton size="xs" onClick={() => deleteFunction(line.id)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line.id)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                                {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} /> }
+                                {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
                     } 
@@ -130,25 +134,50 @@ function Feature({ title, desc, ...rest }) {
 
 
 const ResponsiveTable 
-    = ({ datas, tableConfig, isWideVersion = true, editFunction, deleteFunction, viewFunction } : ResponsiveTableProps) => {
+    = ({ datas, tableConfig, isWideVersion = true, editFunction, deleteFunction, viewFunction, fieldBody, toast } : ResponsiveTableProps) => {
     const keys = Object.keys(tableConfig?.head)  
     const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [data, setData] = useState({});
+    const [headerAlert, setHeaderAlert] = useState({});
+    const [bodyAlert, setBodyAlert] = useState({});
+
+    async function modalDelete(data?) {
+        await setData(data)
+        await setHeaderAlert("Deseja delatar o processo?")
+        await setBodyAlert('Processo nº: ' + data[fieldBody])
+        await onOpen()        
+    }    
+
     return(
         <>
             { isWideVersion && (
                 <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
                     <Head keys={keys} tableConfig={tableConfig}/>
                     <Tbody>
-                        { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
+                        { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
                     </Tbody>
                 </Table>
             )}
 
             { !isWideVersion && (
                 <Accordion allowToggle mt={4}>
-                    { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
+                    { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
                 </Accordion>
             )}
+
+            <AlertCustom
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                headerAlert={headerAlert}
+                bodyAlert={bodyAlert} 
+                actionConfirm={deleteFunction}                
+                data={data}
+            />
+
+
+
         </>
     )
 }

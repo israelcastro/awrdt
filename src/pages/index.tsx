@@ -36,9 +36,9 @@ export default function SignIn() {
       email,
       password
     }
-    console.log(data)
-
+    
     await signIn(data);
+    
     
   }
 

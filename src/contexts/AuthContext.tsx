@@ -2,6 +2,8 @@ import {  createContext, ReactNode, useEffect, useState } from 'react'
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import  Router  from 'next/router'
 import { api } from '../services/base/apiClient';
+import { Flex, useToast } from '@chakra-ui/react';
+import ToastCustom from '../components/ToastCustom';
 
 type User = {
     email: string;
@@ -21,15 +23,23 @@ type AuthContextData = {
     signOut: () => void;
     user: User;
     isAuthenticated: boolean;
+    callToast: (type : string, msg : string) => void;
 };
 
 type AuthProviderProps = {
     children : ReactNode
 }
 
+type toastProps = {
+    type: any,
+    msg : any,
+}
+
 export const AuthContext = createContext({} as AuthContextData)
 
 let authChannel: BroadcastChannel
+
+
 
 export function signOut(){
     destroyCookie(undefined, 'nextauth.token')  
@@ -43,6 +53,7 @@ export function signOut(){
 export function AuthProvider({ children }){
     const [user, setUser] = useState<User>()
     const isAuthenticated = !!user;
+    const toast = useToast()
     
     useEffect(() =>{
         authChannel = new BroadcastChannel('auth')   
@@ -105,14 +116,23 @@ export function AuthProvider({ children }){
 
             api.defaults.headers['Authorization'] = `Bearer ${token}`;
             Router.push('/dashboard');
-    } catch(err) {
-        console.log(err)
+        } catch(err) {
+            console.log(err)
+        }        
     }
-        
+
+    async function callToast(type : any, msg : string){
+        toast({
+            position: 'bottom-left',
+            render: ({onClose}) =>(
+                <ToastCustom type={type} msg={msg} onClose={onClose} />                    
+            ),
+            isClosable: true,
+        })
     }
 
     return (
-        <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user}}>
+        <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user, callToast}}>
             {children}
         </AuthContext.Provider>
     )

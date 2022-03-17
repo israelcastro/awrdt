@@ -98,8 +98,8 @@ export const customTheme = extendTheme({
                     bg: 'transparent',
                     border: '2px solid',
                     borderColor: 'transparent',
-                    color: 'blue.300',
-                    _hover: { color: 'blue.500', textDecor: 'none' },
+                    color: 'white',
+                    _hover: { color: 'gray.50', textDecor: 'none' },
                     _focus: { color: 'blue.400', boxshadow: '0' },
                     _disabled: { color : 'blue.200' },
                 }

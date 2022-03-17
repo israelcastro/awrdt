@@ -1,25 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
-import { CheckCircleIcon, NotAllowedIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon, FormControl,  Icon,  IconButton,  Input, Select, Stack, useBreakpointValue } from '@chakra-ui/react'
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,   
-    Button,
-    FormLabel
-  } from '@chakra-ui/react'
-  import { EditIcon } from '@chakra-ui/icons'
+import { FormControl,  Input, Select, Stack, useBreakpointValue, useDisclosure, Text } from '@chakra-ui/react'
+import {Button, FormLabel } from '@chakra-ui/react'
 import axios from 'axios'
 import ResponsiveTable from '../../components/ResponsiveTable'
 import Body from '../../components/Body'
 import { ProcessoService } from '../../services'
 import Router from 'next/router'
 import Pagination from '../../components/Pagination'
+import AlertCustom from '../../components/AlertCustom'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const LIMIT = 10;
 
@@ -27,24 +18,26 @@ export default function PainelDeProcessos(){
     const baseUrl = "http://localhost:3333"
     const [filtro, setFiltro] = useState('');
     const [offset, setOffset] = useState(0);
-    //const [valorSituacao, setvalorSituacao] = useState('');
-    //variavel de auxilio
     const [data, setData] = useState([])
     const [localidade, setlocalidade] = useState([]);
     const [situacao, setsituacao] = useState([]);
     const [tabelaValor, setTabelaValor] = useState([])
     const [total, setTotal] = useState(0)
-    console.log(filtro);
+
+    const [toast, setToast] = useState({});
+
+    const { callToast } = useContext(AuthContext)
+    
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true
     });
+    const { isOpen, onOpen, onClose } = useDisclosure()
     
     useEffect(() => {        
         getProcesso()
         getLocalidade()
         getSituacao()
-        console.log(tabelaValor)
     }, [offset]);
 
     const getProcesso = async()=>{
@@ -53,19 +46,6 @@ export default function PainelDeProcessos(){
         setData(response.data.results);
         setTabelaValor(response.data.results);
         setTotal(response.data.count)
-
-        console.log(response);
-
-        
-        
-        // await axios.get(baseUrl+"/processos")
-        // .then(response =>{
-        //     setData(response.data)
-        //     setTabelaValor(response.data)
-        //     console.log(tabelaValor)
-        // }).catch(error=>{
-        //     console.log(error)
-        // });
     }
     
    const getLocalidade = async()=> {
@@ -85,14 +65,12 @@ export default function PainelDeProcessos(){
        })
    }
     function selectSituacao(e){
-        console.log(e.target.value+ ">> dentro da função")
         if(e.target.value === 'Todas'){
             return getProcesso()
         }else{
             //Chamar o endPoint atualiza situação
             //setupdateData(true)
             setTabelaValor(data.filter((item, key) =>{
-                console.log(e.target.value+" <meu teste> "+ item.situacao)
                 if(e.target.value == item.situacao){
                     return true;
                 }else{
@@ -113,7 +91,7 @@ export default function PainelDeProcessos(){
                     return false;
                 }
             }))
-            //console.log(JSON.stringify(tabelaValor)+"<<<tabela")
+            
         }        
     }
 
@@ -134,7 +112,7 @@ export default function PainelDeProcessos(){
     }
 
     function editFunction(id){
-        //console.log('Função criada para editar' + id)
+        
        /* Router.push({
             pathname: '/movimentos/create',
             query: { id: id },
@@ -145,9 +123,11 @@ export default function PainelDeProcessos(){
         })
     }
 
-    function deleteFunction() {
-        console.log('Função criada para deletar')
-    }
+    async function deleteFunction(data?) {
+        console.log(data) 
+        //setToast(data);
+        callToast('info', 'Registro deletado com sucesso')     
+    }    
 
     const tableConfig = {
         head : {
@@ -181,23 +161,28 @@ export default function PainelDeProcessos(){
             },
             pop: {
                 name: 'POP',
-                mobileBody: true
+                mobileBody: true,
+                isBoolean : true,
             },
             bo: {
                 name: 'B.O',
-                mobileBody: true
+                mobileBody: true,
+                isBoolean : true,
             },
             condutor: {
                 name: 'Condutor',
-                mobileBody: true
+                mobileBody: true,
+                isBoolean : true,
             },
             foto: {
                 name: 'Foto',
-                mobileBody: true
+                mobileBody: true,
+                isBoolean : true,
             },
             orcamento: {
                 name: 'Orçamento',
-                mobileBody: true
+                mobileBody: true,
+                isBoolean : true,
             },
             
         }
@@ -215,7 +200,7 @@ export default function PainelDeProcessos(){
                         value={filtro}
                         onChange = {(ev) => setFiltro(ev.target.value)}
                         />
-                        <Button onClick={filtroProcesso} colorScheme='teal' variant='outline' m='5px'>
+                        <Button onClick={filtroProcesso} colorScheme='teal' variant='delete' m='5px'>
                             Buscar 
                         </Button> 
                     </FormControl>
@@ -260,11 +245,15 @@ export default function PainelDeProcessos(){
                     isWideVersion={isWideVersion}
                     editFunction={editFunction}
                     deleteFunction={deleteFunction}
+                    fieldBody={'processo'}
+                    toast={toast}
                 />
 
                 {tabelaValor && (
                     <Pagination limit={LIMIT} total={total} offset={offset} setOffset={setOffset} />            
                 )}
+
+                
 
 
 
