@@ -1,18 +1,24 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Button, Flex, FormControl, HStack, Stack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { InputCustom } from "../../components/Form/Input";
 import { SelectCustom } from "../../components/Form/Select";
+import { AuthContext } from "../../contexts/AuthContext";
 import { ProcessoService } from "../../services";
 
 export default function Orcamento(){
     const [tipoDeObra, settipoDeObra] = useState([]);
-
+    const { callToast } = useContext(AuthContext)
+    
     async function getSituacao(){
         const response = await ProcessoService.getSituacoes();
         settipoDeObra(response.data)
     }
+    function handlerclick(){
+            callToast('success', 'Adicionado com sucesso!')   
+    }
     return(
+        
         <>
             {/* <FormControl as='fieldset' >
                 <Stack direction={['column', 'row']} spacing='24px' justifyContent="center" alignItems="center">
@@ -44,7 +50,7 @@ export default function Orcamento(){
                     />
                 </Stack>
                 <Flex alignItems="flex-end">
-                    <Button variant='primary'size="lg" >
+                    <Button variant='primary'size="lg" onClick={handlerclick}>
                         Buscar 
                     </Button>
                 </Flex>

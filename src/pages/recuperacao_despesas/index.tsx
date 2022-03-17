@@ -1,17 +1,9 @@
-import { Box, Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import Body from '../../components/Body'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
-import { ProcessoService } from '../../services'
-import CreateProcesso from '../movimentos/create'
 import Orcamento from './orcamento'
 import Processo from './processo'
-
-
-
-
 
 export default function FormularioTab(){
             
