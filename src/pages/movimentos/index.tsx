@@ -111,7 +111,7 @@ export default function PainelDeProcessos(){
         console.log('Você clicou em enviar. =>'+ filtro )        
     }
 
-    function editFunction(id){
+    function editFunction(data?){
         
        /* Router.push({
             pathname: '/movimentos/create',
@@ -119,7 +119,7 @@ export default function PainelDeProcessos(){
         })*/
         Router.push({
             pathname: '/recuperacao_despesas',
-            query: { id: id },
+            query: { id: data.id },
         })
     }
 
