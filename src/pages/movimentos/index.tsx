@@ -10,6 +10,7 @@ import { ProcessoService } from '../../services'
 import Router from 'next/router'
 import Pagination from '../../components/Pagination'
 import { AuthContext } from '../../contexts/AuthContext'
+import TitleCustom from '../../components/TitleCustom'
 
 const LIMIT = 10;
 
@@ -27,10 +28,6 @@ export default function PainelDeProcessos(){
 
     const { callToast } = useContext(AuthContext)
     
-    const isWideVersion = useBreakpointValue({
-        base: false,
-        lg: true
-    });
     const { isOpen, onOpen, onClose } = useDisclosure()
     
     useEffect(() => {        
@@ -190,7 +187,9 @@ export default function PainelDeProcessos(){
     return(
         <>
             <Header />
-            <Navbar />  
+            <Navbar /> 
+            <TitleCustom title={'Painel de Processos'}/>
+            
             <Body>             
                 <Stack direction={['column', 'row']} spacing='24px'>            
                     <FormControl>            
@@ -241,11 +240,9 @@ export default function PainelDeProcessos(){
                 <ResponsiveTable 
                     datas={tabelaValor} 
                     tableConfig={tableConfig} 
-                    isWideVersion={isWideVersion}
                     editFunction={editFunction}
                     deleteFunction={deleteFunction}
                     fieldBody={'processo'}
-                    toast={toast}
                 />
 
                 {tabelaValor && (

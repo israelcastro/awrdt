@@ -17,12 +17,14 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement,InputProps>
             name={name}
             id={name}
             focusBorderColor="blue.500"
-            borderColor="blue.300"
+            borderColor="blue.700"
+            border="solid 1px"
+            bg="white"
             variant="filled"
-            _hover={{
+            _hover={{ 
                 bgColor: 'blue.100'}}
-            _disabled={{bgColor:'gray.300'}}
-            size="lg"
+            _disabled={{bgColor:'gray.200', borderColor: 'gray.400'}}
+            size="md"
             ref={ref}
             {...rest}
         />

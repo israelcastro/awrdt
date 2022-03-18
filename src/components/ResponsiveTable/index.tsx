@@ -1,24 +1,8 @@
 import { CheckCircleIcon, EditIcon, NotAllowedIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
-import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton, useDisclosure } from "@chakra-ui/react";
+import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton, useDisclosure, useBreakpointValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AlertCustom from "../AlertCustom";
-
-
-interface TableConfigProps {
-    head: Object
-}
-
-interface ResponsiveTableProps {
-    datas: Array<Object>, 
-    tableConfig: TableConfigProps, 
-    isWideVersion: boolean,
-    editFunction?: any,
-    deleteFunction?: any,
-    viewFunction?: any,
-    fieldBody : string,
-    toast? : any,
-}
-
+import { IResponsiveTable } from "./IResponsiveTable";
 
 const Head = ({ keys, tableConfig, bolAction = true }) => {
     const tableHead = tableConfig?.head || {}
@@ -53,7 +37,7 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, modalDelete, d
                 <Td textAlign="center"> 
                     <HStack spacing={1} justifyContent="center">
                         {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
-                        {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
+                        {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
                         {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
                     </HStack>
                 </Td>
@@ -113,7 +97,7 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                             <Heading fontSize='sm'>Ações</Heading>
                             <HStack spacing={1} justifyContent="center">
                                 {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} /> }
-                                {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='delete' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                                {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} /> }
                                 {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
@@ -134,13 +118,18 @@ function Feature({ title, desc, ...rest }) {
 
 
 const ResponsiveTable 
-    = ({ datas, tableConfig, isWideVersion = true, editFunction, deleteFunction, viewFunction, fieldBody, toast } : ResponsiveTableProps) => {
+    = ({ datas, tableConfig, editFunction, deleteFunction, viewFunction, fieldBody } : IResponsiveTable) => {
     const keys = Object.keys(tableConfig?.head)  
     const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [data, setData] = useState({});
     const [headerAlert, setHeaderAlert] = useState({});
     const [bodyAlert, setBodyAlert] = useState({});
+    const isWideVersion = useBreakpointValue({
+        base: false,
+        lg: true
+    });
+    
 
     async function modalDelete(data?) {
         await setData(data)

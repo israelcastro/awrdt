@@ -20,7 +20,7 @@ export function Header() {
           mx="auto"
           px="6"
           align="center"
-          bg="#00ABCC"           
+          bg="blue.600"           
         >
             <Logo />
             { isWideVersion && <SearchBox /> }  

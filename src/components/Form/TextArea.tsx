@@ -17,12 +17,14 @@ const TextareaBase: ForwardRefRenderFunction<HTMLInputElement,TextareaProps>
             name={name}
             id={name}
             focusBorderColor="blue.500"
-            borderColor="blue.300"
+            borderColor="blue.700"
+            border="solid 1px"
+            bg="white"
             variant="filled"
             _hover={{
-                bgColor: 'blue.100'}}
+                bgColor: 'blue.50'}}
             _disabled={{bgColor:'gray.300'}}
-            size="lg"
+            size="md"
             {...rest}
         />
         { !!error && (

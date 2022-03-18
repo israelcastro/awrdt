@@ -130,7 +130,6 @@ export default function Processo(){
                 <TextareaCustom    
                     name="observacao"
                     label="Observação"                 
-                    bgColor='gray.200'
                     value="Lorem Ipsum is simply dummy text of the printing and typesetting industry."                 
                 />      
             </Stack>
