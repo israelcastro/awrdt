@@ -65,8 +65,8 @@ const Pagination = ({ limit, total, offset, setOffset }) => {
                 </Button>
                 { Array.from({ length: Math.min( MAX_ITEMS, pages ) })
                     .map((_, index) => index + first)
-                    .map((page)=>(                        
-                        <PaginationItem number={page} onPageChange={onPageChange} isCurrent={page === current ? true : false}/>
+                    .map((page, i)=>(                        
+                        <PaginationItem key={i} number={page} onPageChange={onPageChange} isCurrent={page === current ? true : false}/>
                 ))}
                 <Button 
                     size="sm"

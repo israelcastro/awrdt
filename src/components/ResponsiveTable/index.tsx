@@ -1,6 +1,7 @@
 import { CheckCircleIcon, EditIcon, NotAllowedIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
 import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton, useDisclosure, useBreakpointValue } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import AlertCustom from "../AlertCustom";
 import { IResponsiveTable } from "./IResponsiveTable";
 
@@ -38,7 +39,7 @@ const Row = ({ line, tableConfig, bolAction = true, editFunction, modalDelete, d
                     <HStack spacing={1} justifyContent="center">
                         {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
                         {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
-                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
+                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='success'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
                     </HStack>
                 </Td>
             }                         
@@ -98,7 +99,7 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                             <HStack spacing={1} justifyContent="center">
                                 {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} /> }
                                 {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='outline'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                                {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='success'  aria-label='Visualizar' icon={<ViewIcon />} /> }
                             </HStack> 
                         </SimpleGrid>
                     } 
@@ -114,11 +115,11 @@ function Feature({ title, desc, ...rest }) {
         <Text>{desc}</Text>
       </Flex>
     )
-  }
+  } 
 
 
 const ResponsiveTable 
-    = ({ datas, tableConfig, editFunction, deleteFunction, viewFunction, fieldBody } : IResponsiveTable) => {
+    = ({ datas = [], tableConfig, editFunction, deleteFunction, viewFunction, fieldBody } : IResponsiveTable) => {
     const keys = Object.keys(tableConfig?.head)  
     const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -129,6 +130,7 @@ const ResponsiveTable
         base: false,
         lg: true
     });
+    const { callToast } = useContext(AuthContext)
     
 
     async function modalDelete(data?) {
@@ -138,37 +140,50 @@ const ResponsiveTable
         await onOpen()        
     }    
 
-    return(
-        <>
-            { isWideVersion && (
-                <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
-                    <Head keys={keys} tableConfig={tableConfig}/>
-                    <Tbody>
-                        { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
-                    </Tbody>
-                </Table>
-            )}
+    try {
+        return(        
+            <>
+                { isWideVersion && (
+                    <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
+                        <Head keys={keys} tableConfig={tableConfig}/>
+                        <Tbody>
+                            { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
+                        </Tbody>
+                    </Table>
+                )}
 
-            { !isWideVersion && (
-                <Accordion allowToggle mt={4}>
-                    { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
-                </Accordion>
-            )}
+                { !isWideVersion && (
+                    <Accordion allowToggle mt={4}>
+                        { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
+                    </Accordion>
+                )}
 
-            <AlertCustom
-                isOpen={isOpen}
-                onOpen={onOpen}
-                onClose={onClose}
-                headerAlert={headerAlert}
-                bodyAlert={bodyAlert} 
-                actionConfirm={deleteFunction}                
-                data={data}
-            />
+                <AlertCustom
+                    isOpen={isOpen}
+                    onOpen={onOpen}
+                    onClose={onClose}
+                    headerAlert={headerAlert}
+                    bodyAlert={bodyAlert} 
+                    actionConfirm={deleteFunction}                
+                    data={data}
+                />
 
 
 
-        </>
-    )
+            </>
+        )
+    } catch (error) {
+        return (
+            <>
+                <Flex flex={1} justifyContent="center" m={20}>
+                    <Heading variant="h3" color="red">Erro ao criar tabela</Heading>
+                </Flex>                 
+            </>
+        )
+    }
+
+
+    
 }
 
 export default ResponsiveTable;
