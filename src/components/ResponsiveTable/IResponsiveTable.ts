@@ -14,7 +14,8 @@ export interface IResponsiveTable {
      *      name : String que irá aparecer no header, 
      *      mobileHead: Boolean que indica quem será o head da tabela mobile,
      *      mobileBody: Boolean que indica se irá aparecer na listagem, 
-     *      isBoolean: Boolean para mostrar icones na tabela, 
+     *      isBoolean: Boolean para mostrar icones na tabela,
+     *      child: String que indica o campo a buscar dentro de um objeto 
      *      isSum: Number que fará a soma no footer da tabela
      *    } 
      * }
@@ -41,6 +42,12 @@ export interface IResponsiveTable {
     * @type string
     */
     fieldBody: string
+    /**
+    * String normal | group 
+    * @type string
+    */
+     typeTable?: string
+    
 }
 
 export interface ITableConfigProps{
@@ -58,5 +65,17 @@ export interface ITableConfigProps{
      * }     
      * @type SystemProps["alignItems"]
      */
-    head: Object 
+    head: Object
 }
+
+export interface IGTableConfigProps {
+    head: Object 
+    items: ItemsProps 
+}
+
+
+interface ItemsProps {
+    name?: string
+    structure : Object 
+}
+

@@ -1,14 +1,33 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Button, Flex, FormControl, HStack, Stack } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { Button, Flex, Stack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import { InputCustom } from "../../components/Form/Input";
 import { SelectCustom } from "../../components/Form/Select";
+import GroupTable from "../../components/ResponsiveTable/GroupTable";
+import { IGTableConfigProps } from "../../components/ResponsiveTable/IResponsiveTable";
+import SubBody from "../../components/SubBody";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ProcessoService } from "../../services";
 
 export default function Orcamento(){
+    const router = useRouter()
     const [tipoDeObra, settipoDeObra] = useState([]);
     const { callToast } = useContext(AuthContext)
+    const [process, setProcess] : any = useState({})
+    const [obras, setObras] : any = useState([])
+    const [itemsObra, setItemsObra] : any = useState([])
+    
+    useEffect(() => {
+        const {id} = router.query 
+        router.isReady && getProcesso(id)         
+    }, [router.isReady]);
+
+    async function getProcesso(id){
+        const response = await ProcessoService.getProcessById(id);
+        await setObras(response.data.obras) 
+        //console.log(response.data)       
+        await setItemsObra(obras.items)         
+    }    
     
     async function getSituacao(){
         const response = await ProcessoService.getSituacoes();
@@ -17,26 +36,53 @@ export default function Orcamento(){
     function handlerclick(){
             callToast('success', 'Adicionado com sucesso!')   
     }
-    return(
-        
-        <>
-            {/* <FormControl as='fieldset' >
-                <Stack direction={['column', 'row']} spacing='24px' justifyContent="center" alignItems="center">
-                    <SelectCustom
-                        name='tipoDeBusca'
-                        label="Tipo de Busca"
-                        options={tipoDeObra}
-                    />
-                    <InputCustom 
-                        name="codigo"
-                        label="Código"
-                    />
-                   <Button colorScheme='teal' variant='primary' p='25px' >
-                        Buscar 
-                    </Button> 
-                </Stack>
-            </FormControl> */}
 
+    function fnDelete(){
+        callToast("error", "Mensagem toast")
+    }
+    
+    const tableConfig : IGTableConfigProps = {
+        head : {
+            obraId: {
+                name: 'Obra',
+                mobileHead: true,
+                headerGroup: true
+            },
+            processoId: {
+                name: 'Processo',
+                mobileHead: true,
+            },
+            total: {
+                name: 'Total',
+                mobileBody: true,
+                footer : true
+            }            
+        },
+        items: {
+            structure: {
+                OS : {
+                    name : 'OS',
+                    mobileBody: true
+                },
+                descricao: {
+                    name : 'Descrição',
+                    mobileBody: true
+                },
+                quantidade: {
+                    name: 'Quantidade',
+                    mobileBody: true
+                },
+                preco: {
+                    name : 'Preço',
+                    mobileBody: true,
+                    group: 'total'
+                },                      
+            }
+        }
+    }
+
+    return(        
+        <>
             <Flex justifyContent="space-between" flex={1} border='1px' borderColor='gray.200' p={3}> 
                 <Stack direction={['column', 'row']} spacing={5} flex={0.9}>
                     <SelectCustom
@@ -55,6 +101,10 @@ export default function Orcamento(){
                     </Button>
                 </Flex>
             </Flex>
+            <SubBody>
+                <GroupTable datas={obras} tableConfig={tableConfig} deleteFunction={fnDelete}/>
+            </SubBody>
+            
           
         </>
         

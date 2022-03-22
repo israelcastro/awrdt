@@ -1,51 +1,12 @@
 import { CheckCircleIcon, EditIcon, NotAllowedIcon, DeleteIcon, ViewIcon } from "@chakra-ui/icons";
-import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, ListItem, Table, Tbody, Td, Th, Thead, Tr, UnorderedList, Stack, HStack, Flex, SimpleGrid, IconButton, useDisclosure, useBreakpointValue } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
+import { Text, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Heading, Table, Tbody, HStack, Flex, SimpleGrid, IconButton, useDisclosure, useBreakpointValue } from "@chakra-ui/react";
+import { useState } from "react";
 import AlertCustom from "../AlertCustom";
+import { HeadCustom } from "./components/HeadCustom";
+import { RowCustom } from "./components/RowCustom";
+import { TableCustom } from "./components/TableCustom";
 import { IResponsiveTable } from "./IResponsiveTable";
 
-const Head = ({ keys, tableConfig, bolAction = true }) => {
-    const tableHead = tableConfig?.head || {}
-    return (
-        <Thead>
-            <Tr background={'#ccc'} color="black">
-                {
-                    keys.map( key => <Th textAlign="center" key={key}>{ tableHead[key]?.name || key }</Th> )
-                }
-                {bolAction && <Th textAlign="center">Ação</Th>}
-            </Tr>
-        </Thead>
-    )
-}
-
-const Row = ({ line, tableConfig, bolAction = true, editFunction, modalDelete, deleteFunction, viewFunction }) => {
-    const keys = Object.keys(tableConfig?.head)
-    return(        
-        <Tr key={line}>
-            { keys.map(key =>
-                <Td textAlign="center" key={key}>
-                    { 
-                        typeof line[key] == "boolean" || tableConfig?.head[key].isBoolean  ? 
-                            (line[key] == true || line[key] ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
-                            : (line[key])
-                    }
-                </Td>                                 
-            ) }
-
-            
-            {bolAction && 
-                <Td textAlign="center"> 
-                    <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} fontSize="xs" /> }
-                        {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} fontSize="xs" /> }
-                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='success'  aria-label='Visualizar' icon={<ViewIcon />} fontSize="xs" /> }
-                    </HStack>
-                </Td>
-            }                         
-        </Tr>
-    ) 
-}
 
 const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, deleteFunction, viewFunction, modalDelete }) => {
     const tableHead = tableConfig?.head || {}
@@ -53,9 +14,8 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
     let headItems = ''
     let bodyItems = ''
     return (
-        <AccordionItem bg={bgColor}>
-            <h2>
-                <AccordionButton _expanded={{ bg: 'blue.600', color: 'white' }}>
+        <AccordionItem bg={bgColor} border={0}>
+                <AccordionButton _expanded={{ bg: 'blue.600', color: 'white' }} _focus={{ boxShadow: 'none' }} pb={0} pt={0}>
                     <HStack  flex='1' textAlign='left'>
                         { keys.map( (key, i) => {
                             if(tableHead[key]?.mobileHead){
@@ -72,7 +32,7 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                     </HStack >
                     <AccordionIcon /> 
                 </AccordionButton>
-            </h2>
+         
             <AccordionPanel pb={4} ml={8} mt={2}>                
                     { keys.map( (key,i) => {
                         if(tableHead[key]?.mobileBody){
@@ -85,6 +45,7 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
                                         {
                                             typeof line[key] == "boolean" || tableConfig?.head[key].isBoolean ? 
                                             (line[key] == true || line[key] ? <CheckCircleIcon color='green' /> : <NotAllowedIcon color='red' />)  
+                                            : (tableConfig?.head[key].child) ? <Text>{line[key][tableConfig?.head[key].child]}</Text>
                                             : <Text>{line[key]}</Text>
                                         }                                      
                                     </Box>
@@ -110,16 +71,16 @@ const Item = ({ tableConfig, line, bolAction = true, bgColor="", editFunction, d
 
 function Feature({ title, desc, ...rest }) {
     return (
-      <Flex p={5} {...rest} flex={1} >
-        <Heading fontSize='md'>{title + ': '}</Heading>
-        <Text>{desc}</Text>
+      <Flex p={5} {...rest} flex={1} alignItems="center" >
+        <Text fontSize='lg' fontWeight="bold">{title + ': '}</Text>
+        <Text ml={2}>{desc}</Text>
       </Flex>
     )
   } 
 
 
 const ResponsiveTable 
-    = ({ datas = [], tableConfig, editFunction, deleteFunction, viewFunction, fieldBody } : IResponsiveTable) => {
+    = ({ datas = [], tableConfig, editFunction, deleteFunction, viewFunction, fieldBody, typeTable = 'normal' } : IResponsiveTable) => {
     const keys = Object.keys(tableConfig?.head)  
     const bolAction = editFunction || deleteFunction || viewFunction ? true : false; 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -128,11 +89,10 @@ const ResponsiveTable
     const [bodyAlert, setBodyAlert] = useState({});
     const isWideVersion = useBreakpointValue({
         base: false,
+        md: false,
         lg: true
     });
-    const { callToast } = useContext(AuthContext)
     
-
     async function modalDelete(data?) {
         await setData(data)
         await setHeaderAlert("Deseja delatar o processo?")
@@ -141,19 +101,17 @@ const ResponsiveTable
     }    
 
     try {
+               
+        
         return(        
-            <>
-                { isWideVersion && (
-                    <Table size='sm' variant='striped' colorScheme='blackAlpha' mt={4}>
-                        <Head keys={keys} tableConfig={tableConfig}/>
-                        <Tbody>
-                            { datas.map((line, i) => <Row key={i} line={line} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction} />) }                        
-                        </Tbody>
-                    </Table>
+            <>  
+                
+                { isWideVersion  && (
+                    <TableCustom datas={datas} tableConfig={tableConfig} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} modalDelete={modalDelete} typeTable={typeTable}/>                
                 )}
 
                 { !isWideVersion && (
-                    <Accordion allowToggle mt={4}>
+                    <Accordion allowToggle mt={4} size='sm'>
                         { datas.map( (line,i) => <Item key={i} bgColor={ i%2 == 0 ? "#F0F0F0" : "#FFFFFF" } tableConfig={tableConfig} line={line} bolAction={bolAction} editFunction={editFunction} modalDelete={modalDelete} deleteFunction={deleteFunction} viewFunction={viewFunction}/> ) }                                            
                     </Accordion>
                 )}
@@ -187,4 +145,8 @@ const ResponsiveTable
 }
 
 export default ResponsiveTable;
+
+
+
+ 
 

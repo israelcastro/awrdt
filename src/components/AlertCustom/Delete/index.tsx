@@ -20,8 +20,8 @@ export function Delete({header, body, isOpen, onClose, actionConfirm, data}:dele
                 <Box>{body}</Box>
             </AlertDialogBody>
             <AlertDialogFooter>
-                <Button variant="outline" ref={cancelRef} onClick={onClose}>Cancelar</Button>
-                <Button variant="delete" ml={3} onClick={() => [actionConfirm(data),onClose()] }>Confirmar</Button>
+                <Button variant="danger" ref={cancelRef} onClick={onClose}>Cancelar</Button>
+                <Button variant="primary" ml={3} onClick={() => [actionConfirm(data),onClose()] }>Confirmar</Button>
             </AlertDialogFooter>
         </AlertDialogContent>
     )

@@ -27,7 +27,10 @@ export const customTheme = extendTheme({
             "50": "#EEEEF2",
         },
         primary : {
-            "100" : "#dc3545", 
+            "100" : "#68b3c8", 
+        },
+        secondary: {
+            "100" : "#7a9e9f"
         }
     },
     fonts:{
@@ -54,6 +57,7 @@ export const customTheme = extendTheme({
                 h1 : { fontSize: '3xl', fontWeight: 'bold', color: 'gray.600'},
                 h2 : { fontSize: '2xl', fontWeight: 'bold', color: 'gray.600' },
                 h3 : { fontSize: 'xl', fontWeight: 'bold', color: 'gray.600' },
+                h4 : { fontSize: 'md', fontWeight: 'bold', color: 'gray.600' },
             }
         },
         Text: {
@@ -64,9 +68,29 @@ export const customTheme = extendTheme({
             }
         },   
         Tabs: {
-            defaultProps: {
-                _focus: { boxShadow: 'none' },
+            variants: {
+                'line' : {
+                   tablist: {
+                       border: 0
+                   },
+                   tab: {
+                        bg: '#EEEEF2',
+                        borderInlineStart: '2px solid #b3b5c6',
+                        border: 0,
+                        //borderColor : '#b3b5c6',
+                        _selected: { 
+                            bg:'primary.100', 
+                            color: 'white',                                                        
+                        },   
+                        _focus: { boxShadow: 'none'},
+                    },
+                    tabpanel: {
+                        p : 4,
+                        pb: 0,
+                    }
+                }
             }
+
         },     
         Button: {
             defaultProps: { variant : 'primary' },

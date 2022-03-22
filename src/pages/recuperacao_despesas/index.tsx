@@ -1,32 +1,43 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Icon, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useBreakpointValue } from '@chakra-ui/react'
 import Body from '../../components/Body'
 import { Header } from '../../components/Header'
 import Navbar from '../../components/Navbar'
+import TitleCustom from '../../components/TitleCustom'
 import Orcamento from './orcamento'
 import Processo from './processo'
+import {RiAttachment2, RiCoinsLine, RiListUnordered,RiMoneyDollarCircleLine,RiPercentLine} from "react-icons/ri";
+import { TabCustom } from '../../components/TabCustom'
 
 export default function FormularioTab(){
+
+    const isWideVersion = useBreakpointValue({
+        base: false,
+        md: true,
+        lg: true
+    });
             
     return (
         <>
             <Header />
             <Navbar/>
-            <h1> </h1>
+            <TitleCustom title='Processo de Recuperação de Despesas'/>
             <Body>
-                <Text fontSize='4xl'>Processo de Recuperação de Despesas</Text>
-                <Tabs size='md' variant='enclosed'>
+                <Tabs size='md' variant='line' isLazy 
+                    orientation={isWideVersion ? 'horizontal' : 'vertical'}
+                   
+                >
                     <TabList>
-                        <Tab>Detalhes</Tab>
-                        <Tab>Orçamento</Tab>
-                        <Tab>Anexo</Tab>
-                        <Tab>Ações de Cobranças</Tab>
+                        <TabCustom icon={RiListUnordered} text="Detalhes"/>
+                        <TabCustom icon={RiPercentLine} text="Orçamentos"/>
+                        <TabCustom icon={RiAttachment2} text="Anexos"/>
+                        <TabCustom icon={RiCoinsLine} text="Ações de cobrança"/>
                     </TabList>
                     <TabPanels>
-                        <TabPanel>
+                        <TabPanel >
                             <Processo  />
                         </TabPanel>
                         <TabPanel>
-                           <Orcamento />
+                           <Orcamento /> 
                         </TabPanel>
                         <TabPanel>
                             <p>Anexo</p>

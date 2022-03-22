@@ -33,12 +33,13 @@ export default function PainelDeProcessos(){
     useEffect(() => {        
         getProcesso()
         getLocalidade()
-        getSituacao()
+        //getSituacao()
     }, [offset]);
 
     const getProcesso = async()=>{
         
         const response = await ProcessoService.listProcesses(offset, LIMIT)
+        
         setData(response.data.results);
         setTabelaValor(response.data.results);
         setTotal(response.data.count)
@@ -141,7 +142,8 @@ export default function PainelDeProcessos(){
             },
             situacao: {
                 name: 'Situação',
-                mobileBody: true
+                mobileBody: true,
+                child: 'value'
             },
             localidadade: {
                 name: 'localidade',
@@ -163,7 +165,7 @@ export default function PainelDeProcessos(){
             bo: {
                 name: 'B.O',
                 mobileBody: true,
-                isBoolean : true,
+                isBoolean : true, 
             },
             condutor: {
                 name: 'Condutor',
@@ -191,7 +193,7 @@ export default function PainelDeProcessos(){
             <TitleCustom title={'Painel de Processos'}/>
             
             <Body>             
-                <Stack direction={['column', 'row']} spacing='24px'>            
+                {/* <Stack direction={['column', 'row']} spacing='24px'>            
                     <FormControl>            
                         <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
                         <Input id='processo' type='number' width='auto'
@@ -208,7 +210,7 @@ export default function PainelDeProcessos(){
                             bg='white'
                             borderColor='black'
                             id='situacao'
-                            onChange={(e) => selectSituacao(e)}
+                            
                         >
                             <option value='Todas' selected>Todas</option>
                             {situacao.map((item) =>{
@@ -236,13 +238,14 @@ export default function PainelDeProcessos(){
                             )}
                         </Select>                                    
                     </FormControl>
-                </Stack>
+                </Stack> */}
                 <ResponsiveTable 
                     datas={tabelaValor} 
                     tableConfig={tableConfig} 
                     editFunction={editFunction}
-                    deleteFunction={deleteFunction}
+                    deleteFunction={deleteFunction}                    
                     fieldBody={'processo'}
+                    typeTable="normal"
                 />
 
                 {tabelaValor && (

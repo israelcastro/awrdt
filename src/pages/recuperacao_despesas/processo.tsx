@@ -44,8 +44,6 @@ export default function Processo(){
 
     return (
         <>
-            <Text fontSize='2xl'>Processo {JSON.stringify(process)}</Text>
-            <Divider height={0.6} bgColor='gray.900' />
             <Stack direction={['column', 'row']} spacing='24px'>
 
                 <InputCustom 

@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 
 export default function Body(props){
     return(
-        <Flex flex={1} m={4} flexDirection="column" bg="white" shadow="md" p={6} borderRadius="3">
+        <Flex flex={1} m={4} flexDirection="column" bg="white" shadow="md" p={[1,6]} borderRadius="3">
             {props.children}
         </Flex>
     )
