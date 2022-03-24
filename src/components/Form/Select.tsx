@@ -20,25 +20,23 @@ interface SelectProps extends ChakraSelectProps {
 const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps> 
     = ({ name, label, options = [], valor, error = null, ...rest }, ref) => {
     return(
-        <FormControl isInvalid={!!error}>          
-            { !!label && <FormLabel htmlFor={name} fontWeight="normal">{label}</FormLabel> }
+        <FormControl isInvalid={!!error} variant='floating'>
             <ChakraSelect 
+                placeholder=' '
                 name={name}
                 id={name}
-                placeholder=""
                 focusBorderColor="blue.500"
                 borderColor="blue.700"
                 border="solid 1px"
                 bg="white"
                 variant="filled"
                 _hover={{
-                    bgColor: 'blue.100'}}
+                    bgColor: 'blue.100'}} 
                 size="md"
                 ref={ref}
-                _defaultValue = {valor}
+                //onChange={(event)=>inputChangedHandler(event)} />
                 {...rest}
-            >
-                
+            >   
                 {
                     options.map((option : any, index) => {
                         return(
@@ -48,8 +46,12 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
                         )
                         
                     })
+                    
                 }
+
+                <option defaultChecked>asd</option>
             </ChakraSelect>
+            { !!label && <FormLabel htmlFor={name} fontSize={[13,16]} fontWeight="normal">{label}</FormLabel> }
         </FormControl>
     )
 

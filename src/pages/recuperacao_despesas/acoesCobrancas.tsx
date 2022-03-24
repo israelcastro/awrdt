@@ -16,11 +16,7 @@ const formularioInicial = [{
     sucessoCobranca: 'teste',
     responsavelCobranca: 'teste',
     observacao:'teste',
-<<<<<<< Updated upstream
     dataRegistro:'15/03/2022'
-=======
-    dataRegistro:'teste'
->>>>>>> Stashed changes
 }]
 
 export default function AcoesCobrancas(){
@@ -177,12 +173,7 @@ export default function AcoesCobrancas(){
                 <Stack direction={['column', 'row']} spacing='24px' mt={5}> 
                     <TextareaCustom    
                         name="observacao"
-<<<<<<< Updated upstream
                         label="Observação" 
-=======
-                        label="Observação"                 
-                        value="Lorem Ipsum is simply dummy text of the printing and typesetting industry."                 
->>>>>>> Stashed changes
                         onChange={handleForm}
                     />      
                 </Stack>

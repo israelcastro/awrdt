@@ -10,6 +10,7 @@ import { FaHandshake } from "react-icons/fa";
 import { TabCustom } from '../../components/TabCustom'
 import Anexos from './anexos'
 import AcoesCobrancas from './acoesCobrancas'
+import Negociacao from './negociacao'
 
 export default function FormularioTab(){
 
@@ -49,6 +50,9 @@ export default function FormularioTab(){
                         </TabPanel>
                         <TabPanel>
                             <AcoesCobrancas />
+                        </TabPanel>
+                        <TabPanel>
+                            <Negociacao />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

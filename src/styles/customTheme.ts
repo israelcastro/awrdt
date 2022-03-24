@@ -1,5 +1,9 @@
 import { extendTheme } from '@chakra-ui/react'
 
+const activeLabelStyles = {
+    transform: 'scale(0.85) translatex(-20px) translateY(-26px)',
+}
+
 export const customTheme = extendTheme({
     colors: {        
         blue:{
@@ -267,7 +271,49 @@ export const customTheme = extendTheme({
                     _disabled: { color : 'blue.200' },
                 }
             }
-        }
+        },
+        Form: {
+            variants: {
+              floating: {
+                container: {
+                  _focusWithin: {
+                    label: {
+                      ...activeLabelStyles,
+                      backgroundColor: '#68b3c8',
+                      borderRadius: 'full',
+                      color: 'white'
+                    },
+                  },
+                  'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label':
+                    {
+                      ...activeLabelStyles,
+                      backgroundColor: '#68b3c8',
+                      borderRadius: 'full',
+                      color: 'white'
+                    },
+                    'textarea:not(:placeholder-shown) + label, .chakra-select__wrapper + label':
+                    {
+                      ...activeLabelStyles,
+                      backgroundColor: '#68b3c8',
+                      borderRadius: 'full',
+                      color: 'white'
+                    },
+                  label: {
+                    top: 0,
+                    left: 0,
+                    zIndex: 2,
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    borderRadius: 'full',
+                    mx: 3,
+                    px: 1,
+                    my: 2,
+                    transformOrigin: 'left top'
+                  },
+                },
+              },
+            },
+          },
 
     },
     

@@ -11,9 +11,9 @@ interface TextareaProps extends ChakraTextareaProps {
 const TextareaBase: ForwardRefRenderFunction<HTMLInputElement,TextareaProps> 
     = ({ name, label, error = null, ...rest }, ref) => {
     return(
-    <FormControl isInvalid={!!error}>          
-        { !!label && <FormLabel fontWeight="normal" htmlFor={name}>{label}</FormLabel> }
+    <FormControl isInvalid={!!error} variant='floating'>          
         <ChakraTextarea
+            placeholder=' '
             name={name}
             id={name}
             focusBorderColor="blue.500"
@@ -27,6 +27,7 @@ const TextareaBase: ForwardRefRenderFunction<HTMLInputElement,TextareaProps>
             size="md"
             {...rest}
         />
+        { !!label && <FormLabel fontWeight="normal" fontSize={[13,16]} htmlFor={name}>{label}</FormLabel> }
         { !!error && (
             <FormErrorMessage>
                 {error.message}
