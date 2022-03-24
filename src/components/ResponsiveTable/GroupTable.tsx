@@ -1,5 +1,5 @@
 import { AddIcon, DeleteIcon, EditIcon, MinusIcon, ViewIcon } from "@chakra-ui/icons"
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Heading, HStack, IconButton, SimpleGrid, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure } from "@chakra-ui/react"
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Divider, Flex, Heading, HStack, IconButton, SimpleGrid, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack } from "@chakra-ui/react"
 import { useState } from "react"
 import AlertCustom from "../AlertCustom";
 
@@ -110,9 +110,12 @@ const ItemPanel = ({datas,tableConfig,editFunction,deleteFunction,viewFunction,b
                 <TableAccordion datas={datas} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} modalDelete={modalDelete}/>
             }
 
-            {!isWideVersion &&
-                <AccordionBody datas={datas.items} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} modalDelete={modalDelete}/>
-            }
+            {!isWideVersion && (
+                // <AccordionBody datas={datas.items} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} modalDelete={modalDelete}/>
+                datas.items.map((line, i) => <AccordionBody datas={datas.items} index={i} tableConfig={tableConfig} bolAction={bolAction} editFunction={editFunction} deleteFunction={deleteFunction} viewFunction={viewFunction} modalDelete={modalDelete}/>)                                                                                             
+            )}
+
+            <AccordionFooter datas={datas} tableConfig={tableConfig}/>
             
         </AccordionPanel>
     )
@@ -168,41 +171,61 @@ const TableBody = ({datas, tableConfig, editFunction,deleteFunction,viewFunction
     )
 }
 
-const AccordionBody = ({datas,tableConfig,editFunction,deleteFunction,viewFunction,bolAction,modalDelete}) => {
+const AccordionBody = ({datas,tableConfig,editFunction,deleteFunction,viewFunction,bolAction,modalDelete,index}) => {
     const tableHead = tableConfig?.items.structure || {}
     const keys = Object.keys(tableHead) 
     const data = datas[0]; 
 
-    console.log(tableHead)
     return (
-        <AccordionPanel p={1}>                
-            { keys.map( (key,i) => {
-                if(tableHead[key]?.mobileBody){
-                    return(
-                        <SimpleGrid columns={2} key={i} alignItems="center" justifyContent="center" mt={2}>
-                            <Box>                                        
-                                <Heading fontSize='sm'>{tableHead[key].name || key + ': '}</Heading>
-                            </Box>
-                            <Box fontSize="sm">
-                                {data[key]}                                    
-                            </Box>
-                        </SimpleGrid >
-                    )                                                                  
+        <>
+            <AccordionPanel p={1}>                 
+                { keys.map( (key,i) => {
+                    if(tableHead[key]?.mobileBody){
+                        return(
+                            <SimpleGrid columns={2} key={i} alignItems="center" justifyContent="center" mt={2}>
+                                <Box>                                        
+                                    <Heading fontSize='sm'>{tableHead[key].name || key + ': '}</Heading>
+                                </Box>
+                                <Box fontSize="sm">
+                                    {data[key]}                                    
+                                </Box>
+                            </SimpleGrid >                        
+                        )                                                                  
+                    }
+                })           
+                
                 }
-            })            
-            }
 
-            {/* {bolAction && 
-                <SimpleGrid columns={2} mt={10}>
-                    <Heading fontSize='sm'>Ações</Heading>
-                    <HStack spacing={1} justifyContent="center">
-                        {editFunction && <IconButton size="xs" onClick={() => editFunction(line)} aria-label='Editar' icon={<EditIcon />} /> }
-                        {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(line)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} /> }
-                        {viewFunction && <IconButton size="xs" onClick={() => viewFunction(line)} variant='success'  aria-label='Visualizar' icon={<ViewIcon />} /> }
-                    </HStack> 
-                </SimpleGrid>
-            }  */}
-    </AccordionPanel>
+                {bolAction && 
+                    <SimpleGrid columns={2} mt={10} >
+                        <Heading fontSize='sm'>Ações</Heading>
+                        <HStack spacing={1} justifyContent="center">
+                            {editFunction && <IconButton size="xs" onClick={() => editFunction(datas)} aria-label='Editar' icon={<EditIcon />} /> }
+                            {deleteFunction && <IconButton size="xs" onClick={() => modalDelete(datas)} variant='danger' aria-label='Deletar' icon={<DeleteIcon />} /> }
+                            {viewFunction && <IconButton size="xs" onClick={() => viewFunction(datas)} variant='success'  aria-label='Visualizar' icon={<ViewIcon />} /> }
+                        </HStack> 
+                    </SimpleGrid>
+                } 
+        </AccordionPanel>
+        <Divider />
+    </>
+    )
+}
+
+const AccordionFooter = ({datas, tableConfig}) => {
+    const tableHead = tableConfig?.head || {}
+    const keys = Object.keys(tableHead)
+    
+    return (
+        <VStack>
+            {keys.map((key,i) =>
+                tableHead[key].footer && 
+                <Flex direction='row'>
+                    <Text fontSize="sm" fontWeight="bold">{tableHead[key].name + ': '}</Text>
+                    <Text fontSize="sm">{datas[key]}</Text>  
+                </Flex>
+            )}           
+        </VStack>
     )
 }
 

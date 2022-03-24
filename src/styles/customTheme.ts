@@ -78,10 +78,7 @@ export const customTheme = extendTheme({
                         borderInlineStart: '2px solid #b3b5c6',
                         border: 0,
                         //borderColor : '#b3b5c6',
-                        _selected: { 
-                            bg:'primary.100', 
-                            color: 'white',                                                        
-                        },   
+                           
                         _focus: { boxShadow: 'none'},
                     },
                     tabpanel: {

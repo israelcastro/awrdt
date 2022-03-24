@@ -37,8 +37,12 @@ export default function Orcamento(){
             callToast('success', 'Adicionado com sucesso!')   
     }
 
-    function fnDelete(){
-        callToast("error", "Mensagem toast")
+    function fnDelete(data?){
+        callToast("error", "Registro deletado com sucesso")
+    }
+
+    function editFunction(data?){
+        callToast("success", "Registro alterado com sucesso")
     }
     
     const tableConfig : IGTableConfigProps = {
@@ -56,6 +60,11 @@ export default function Orcamento(){
                 name: 'Total',
                 mobileBody: true,
                 footer : true
+            },
+            subtotal : {
+                name: 'Subtotal',
+                mobileBody: true,
+                footer : true
             }            
         },
         items: {
@@ -70,7 +79,8 @@ export default function Orcamento(){
                 },
                 quantidade: {
                     name: 'Quantidade',
-                    mobileBody: true
+                    mobileBody: true,
+                    group: 'subtotal'
                 },
                 preco: {
                     name : 'Preço',
@@ -102,7 +112,11 @@ export default function Orcamento(){
                 </Flex>
             </Flex>
             <SubBody>
-                <GroupTable datas={obras} tableConfig={tableConfig} deleteFunction={fnDelete}/>
+                <GroupTable
+                  datas={obras}
+                  tableConfig={tableConfig}
+                  editFunction={editFunction}
+                  deleteFunction={fnDelete} />
             </SubBody>
             
           

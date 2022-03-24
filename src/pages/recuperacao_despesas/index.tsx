@@ -6,6 +6,7 @@ import TitleCustom from '../../components/TitleCustom'
 import Orcamento from './orcamento'
 import Processo from './processo'
 import {RiAttachment2, RiCoinsLine, RiListUnordered,RiMoneyDollarCircleLine,RiPercentLine} from "react-icons/ri";
+import { FaHandshake } from "react-icons/fa";
 import { TabCustom } from '../../components/TabCustom'
 import Anexos from './anexos'
 import AcoesCobrancas from './acoesCobrancas'
@@ -21,7 +22,8 @@ export default function FormularioTab(){
     return (
         <>
             <Header />
-            <Navbar/>
+            <Navbar/>        
+            
             <TitleCustom title='Processo de Recuperação de Despesas'/>
             <Body>
                 <Tabs size='md' variant='line' isLazy 
@@ -33,6 +35,7 @@ export default function FormularioTab(){
                         <TabCustom icon={RiPercentLine} text="Orçamentos"/>
                         <TabCustom icon={RiAttachment2} text="Anexos"/>
                         <TabCustom icon={RiCoinsLine} text="Ações de cobrança"/>
+                        <TabCustom icon={FaHandshake} text="Negociação"/>
                     </TabList>
                     <TabPanels>
                         <TabPanel >
