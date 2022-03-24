@@ -35,6 +35,7 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
                     bgColor: 'blue.100'}}
                 size="md"
                 ref={ref}
+                _defaultValue = {valor}
                 {...rest}
             >
                 
@@ -42,9 +43,7 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement,SelectProps>
                     options.map((option : any, index) => {
                         return(
                             
-                           valor === option.id
-                                ? <option key={index} selected value={option.id}>{option.value}</option>
-                                : <option key={index} value={option.id}>{option.value}</option>
+                            <option key={index} value={option.id}>{option.value}</option>
                             
                         )
                         

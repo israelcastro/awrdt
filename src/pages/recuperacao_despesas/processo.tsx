@@ -11,9 +11,9 @@ export default function Processo(){
     const [situacaoForm, setsituacaoForm] = useState([]);
     const [origem, setorigem] = useState([]);
     let [value, setValue] = useState('')
-
     const router = useRouter()
     const [process, setProcess] = useState([]);
+    
     useEffect(() => {
         const {id} = router.query 
         router.isReady && getProcesso(id) 
@@ -42,22 +42,27 @@ export default function Processo(){
         setValue(inputValue)
     }   
 
+
     return (
         <>
+            <Text fontSize='2xl'>Processo</Text>
+            <Divider height={0.6} bgColor='gray.900' />
             <Stack direction={['column', 'row']} spacing='24px'>
 
                 <InputCustom 
                     name= "codigo"
                     label="Código:"
                     type="text"
+                    isReadOnly={true}
                     isDisabled={true}
                     value={process['processo']}
-                />
+                />{/*
                  <InputCustom 
                     name= "dataAbertura"
                     label="Data de Abertura:"
                     type="date"
                     //value={props['abertura']}
+                    onChange={handleInputChange}
                     value={FormatDados.data(process['abertura'])}
                 />
                 <SelectCustom 
@@ -71,9 +76,9 @@ export default function Processo(){
                     label="Ultima Alteração:"
                     type="date"
                     value={FormatDados.data(process['ultimaAcao'])}
-                />
+                />*/}
             </Stack>
-            <Stack direction={['column', 'row']} spacing='24px' mt={5}>
+            {/*<Stack direction={['column', 'row']} spacing='24px' mt={5}>
                 <InputCustom 
                     name= "boletimOcorrencia"
                     label="Boletim Ocorrência:"
@@ -122,8 +127,7 @@ export default function Processo(){
                     value="Rua Maria Rosa, 120"                    
                 />  
             </Stack>
-            <Stack direction={['column', 'row']} spacing='24px' mt={5}>
-                              
+            <Stack direction={['column', 'row']} spacing='24px' mt={5}>                             
                
                 <TextareaCustom    
                     name="observacao"
@@ -297,7 +301,7 @@ export default function Processo(){
                     type="text"
                     value={process['ocorrencia']}
                 /> 
-            </Stack>           
+    </Stack>  */}         
         </>
     )
 }

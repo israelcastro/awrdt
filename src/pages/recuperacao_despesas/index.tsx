@@ -7,6 +7,8 @@ import Orcamento from './orcamento'
 import Processo from './processo'
 import {RiAttachment2, RiCoinsLine, RiListUnordered,RiMoneyDollarCircleLine,RiPercentLine} from "react-icons/ri";
 import { TabCustom } from '../../components/TabCustom'
+import Anexos from './anexos'
+import AcoesCobrancas from './acoesCobrancas'
 
 export default function FormularioTab(){
 
@@ -40,10 +42,10 @@ export default function FormularioTab(){
                            <Orcamento /> 
                         </TabPanel>
                         <TabPanel>
-                            <p>Anexo</p>
+                            <Anexos/>
                         </TabPanel>
                         <TabPanel>
-                            <p>Ações de Cobranças</p>
+                            <AcoesCobrancas />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

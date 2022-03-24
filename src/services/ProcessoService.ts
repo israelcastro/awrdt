@@ -16,8 +16,28 @@ class ProcessoService {
     getOrigens(){
         return api.get(`/origens`)
     }
+
+    getTipoAnexo(){
+        return api.get(`/tipoAnexos`)
+    }
     
+    getOrigemAnexo(){
+        return api.get(`/origemAnexos`)
+    }
     
+    getTipoCobranca(){
+        return api.get(`/tipoCobrancas`)
+    }
+
+    getSucessoCobranca(){
+        return api.get(`/sucessoCobrancas`)
+    }
+
+    postTeste(dados){
+        return api.post(`/teste`, {
+            dados
+        })
+    }
 }
 
 export default new ProcessoService();

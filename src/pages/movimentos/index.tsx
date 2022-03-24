@@ -193,7 +193,7 @@ export default function PainelDeProcessos(){
             <TitleCustom title={'Painel de Processos'}/>
             
             <Body>             
-                {/* <Stack direction={['column', 'row']} spacing='24px'>            
+                <Stack direction={['column', 'row']} spacing='24px'>            
                     <FormControl>            
                         <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
                         <Input id='processo' type='number' width='auto'
@@ -206,20 +206,20 @@ export default function PainelDeProcessos(){
                     </FormControl>
                     <FormControl>
                         <FormLabel htmlFor='situacao'>Situação</FormLabel>
-                        <Select                
+                        {/* <Select                
                             bg='white'
                             borderColor='black'
                             id='situacao'
-                            
+                            defaultValue={'Todas'}
                         >
-                            <option value='Todas' selected>Todas</option>
+                            <option value="Todas">Todas</option>
                             {situacao.map((item) =>{
                                 return(
                                     <option key={item.id} value={item.value}>{item.value}</option>
                                 )
                             }
                             )}
-                        </Select>                                    
+                        </Select>                                     */}
                     </FormControl> 
                     <FormControl>
                         <FormLabel htmlFor='situacao'>Localidade</FormLabel>
@@ -228,8 +228,9 @@ export default function PainelDeProcessos(){
                             borderColor='black'
                             id='localidade'
                             onChange={(e) => selectLocalidade(e)}
+                            defaultValue={'Todas'}
                         >
-                        <option value='Todas' selected>Todas</option>
+                        <option value='Todas'>Todas</option>
                             {localidade.map((item) =>{
                                 return(
                                     <option key={item.id} value={item.local}>{item.local}</option>
@@ -238,7 +239,7 @@ export default function PainelDeProcessos(){
                             )}
                         </Select>                                    
                     </FormControl>
-                </Stack> */}
+                </Stack>{console.log(tabelaValor)}
                 <ResponsiveTable 
                     datas={tabelaValor} 
                     tableConfig={tableConfig} 

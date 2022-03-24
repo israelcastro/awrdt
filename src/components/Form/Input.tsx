@@ -25,6 +25,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement,InputProps>
                 bgColor: 'blue.100'}}
             _disabled={{bgColor:'gray.200', borderColor: 'gray.400'}}
             size="md"
+            _readOnly={{readOnly: 'true'}}
             ref={ref}
             {...rest}
         />
