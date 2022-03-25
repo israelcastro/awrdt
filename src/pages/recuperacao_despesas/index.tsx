@@ -25,11 +25,10 @@ export default function FormularioTab(){
             <Header />
             <Navbar/>        
             
-            <TitleCustom title='Processo de Recuperação de Despesas'/>
+            <TitleCustom title='Processo de Recuperação de Despesas' subtitle='Processo: 2019107450'/>
             <Body>
                 <Tabs size='md' variant='line' isLazy 
-                    orientation={isWideVersion ? 'horizontal' : 'vertical'}
-                   
+                    orientation={isWideVersion ? 'horizontal' : 'vertical'}                   
                 >
                     <TabList>
                         <TabCustom icon={RiListUnordered} text="Detalhes"/>

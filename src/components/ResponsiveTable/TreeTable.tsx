@@ -15,8 +15,8 @@ const TreeTable = ({datas,tableConfig}) => {
                 </SubBody>
                 <HStack flex={1} bg='gray.200' justifyContent='space-between' p={2} mt={2}>
                     <Footer title='Total Orçado:' value={datas.totalOrcado}/>
-                    <Footer title='Total Recuperado:' value={datas.totalOrcado}/>
-                    <Footer title='Total Pendente:' value={datas.totalOrcado} color='red'/>
+                    <Footer title='Total Recuperado:' value={datas.totalPago}/>
+                    <Footer title='Total Pendente:' value={datas.totalPendente} color='red'/>
                 </HStack>
             </>
         )
@@ -137,7 +137,12 @@ const Footer = ({title, value, color = ''}) => {
     return (
         <HStack alignItems='center' p={1} spacing={3}>
             <Heading variant='h4'>{title}</Heading>
-            <Text variant="default" color={color && color}>{' R$ ' + value}</Text>
+            <Text variant="default" color={color && color}>
+                {new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(value)}
+            </Text>
         </HStack>
     )
 }

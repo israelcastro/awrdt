@@ -1,6 +1,6 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 
-export function GridCustom({border = false, cols = 5, ...rest}) {
+export function GridCustom({border = false, cols = 5, p = 6, ...rest}) {
     const templateColumns = 'repeat(' + cols + ',1fr)'    
     return (
         <Grid
@@ -9,7 +9,7 @@ export function GridCustom({border = false, cols = 5, ...rest}) {
             border={border && "1px solid" }
             borderColor={border && "gray.100"}
             borderRadius={5}
-            p={6}   
+            p={p}   
             mt={2}         
         > 
 
@@ -25,7 +25,8 @@ export function GridItemCustom({cols = 1, ...rest}) {
     return (
         <GridItem
             //h={[10]}
-            colSpan={[1,cols]}           
+            colSpan={[1,cols]}
+            {...rest}
         >
             {rest.children}
         </GridItem>

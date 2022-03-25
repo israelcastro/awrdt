@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { InputCustom } from "../../components/Form/Input";
 import { SelectCustom } from "../../components/Form/Select";
+import { GridCustom, GridItemCustom } from "../../components/GridCustom";
 import GroupTable from "../../components/ResponsiveTable/GroupTable";
 import { IGTableConfigProps } from "../../components/ResponsiveTable/IResponsiveTable";
 import SubBody from "../../components/SubBody";
@@ -93,24 +94,29 @@ export default function Orcamento(){
 
     return(        
         <>
-            <Flex justifyContent="space-between" flex={1} border='1px' borderColor='gray.200' p={3}> 
-                <Stack direction={['column', 'row']} spacing={5} flex={0.9}>
+            
+            <GridCustom cols={6} border={true}>
+                <GridItemCustom cols={2}>
                     <SelectCustom
                         name='tipoDeBusca'
                         label="Tipo de Busca"
                         options={tipoDeObra}
                     /> 
+                </GridItemCustom>
+                <GridItemCustom cols={2}>
                     <InputCustom 
                         name="codigo"
                         label="Código"
                     />
-                </Stack>
-                <Flex alignItems="flex-end">
-                    <Button variant='primary'size="lg" onClick={handlerclick}>
+                </GridItemCustom>
+                <GridItemCustom cols={1}></GridItemCustom>
+                <GridItemCustom>
+                    <Button onClick={handlerclick} w="200px">
                         Buscar 
                     </Button>
-                </Flex>
-            </Flex>
+                </GridItemCustom>
+            </GridCustom>
+            
             <SubBody>
                 <GroupTable
                   datas={obras}

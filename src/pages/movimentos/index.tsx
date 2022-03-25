@@ -11,6 +11,9 @@ import Router from 'next/router'
 import Pagination from '../../components/Pagination'
 import { AuthContext } from '../../contexts/AuthContext'
 import TitleCustom from '../../components/TitleCustom'
+import { GridCustom, GridItemCustom } from '../../components/GridCustom'
+import { InputCustom } from '../../components/Form/Input'
+import { SelectCustom } from '../../components/Form/Select'
 
 const LIMIT = 10;
 
@@ -193,53 +196,21 @@ export default function PainelDeProcessos(){
             <TitleCustom title={'Painel de Processos'}/>
             
             <Body>             
-                <Stack direction={['column', 'row']} spacing='24px'>            
-                    <FormControl>            
-                        <FormLabel htmlFor='processo'>Buscar Processo</FormLabel>
-                        <Input id='processo' type='number' width='auto'
-                        value={filtro}
-                        onChange = {(ev) => setFiltro(ev.target.value)}
-                        />
-                        <Button onClick={filtroProcesso} colorScheme='teal' variant='delete' m='5px'>
-                            Buscar 
-                        </Button> 
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel htmlFor='situacao'>Situação</FormLabel>
-                        {/* <Select                
-                            bg='white'
-                            borderColor='black'
-                            id='situacao'
-                            defaultValue={'Todas'}
-                        >
-                            <option value="Todas">Todas</option>
-                            {situacao.map((item) =>{
-                                return(
-                                    <option key={item.id} value={item.value}>{item.value}</option>
-                                )
-                            }
-                            )}
-                        </Select>                                     */}
-                    </FormControl> 
-                    <FormControl>
-                        <FormLabel htmlFor='situacao'>Localidade</FormLabel>
-                        <Select
-                            bg='white'
-                            borderColor='black'
-                            id='localidade'
-                            onChange={(e) => selectLocalidade(e)}
-                            defaultValue={'Todas'}
-                        >
-                        <option value='Todas'>Todas</option>
-                            {localidade.map((item) =>{
-                                return(
-                                    <option key={item.id} value={item.local}>{item.local}</option>
-                                )
-                            }
-                            )}
-                        </Select>                                    
-                    </FormControl>
-                </Stack>{console.log(tabelaValor)}
+                <GridCustom border={true} cols={4}>
+                    <GridItemCustom>
+                        <InputCustom name="processo" label='Buscar Processo'/>
+                    </GridItemCustom>
+                    <GridItemCustom>
+                        <SelectCustom name='situacao' label='Situação do processo' />
+                    </GridItemCustom>
+                    <GridItemCustom>
+                        <SelectCustom name='localidade' label='Localidade' />
+                    </GridItemCustom>
+                    <GridItemCustom>
+                        <Button w={["310px","300px"]}>Buscar</Button>
+                    </GridItemCustom>
+                </GridCustom>
+
                 <ResponsiveTable 
                     datas={tabelaValor} 
                     tableConfig={tableConfig} 
@@ -252,11 +223,7 @@ export default function PainelDeProcessos(){
                 {tabelaValor && (
                     <Pagination limit={LIMIT} total={total} offset={offset} setOffset={setOffset} />            
                 )}
-
                 
-
-
-
             </Body>
         </>
     )    

@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { InputCustom } from "../../components/Form/Input";
 import { SelectCustom } from "../../components/Form/Select";
 import { TextareaCustom } from "../../components/Form/TextArea";
+import { GridCustom, GridItemCustom } from "../../components/GridCustom";
 import ResponsiveTable from "../../components/ResponsiveTable";
+import SubBody from "../../components/SubBody";
 import FormatDados from "../../FormatDados";
 import ProcessoService from "../../services/ProcessoService";
 
@@ -71,7 +73,7 @@ export default function AcoesCobrancas(){
        const dados = await ProcessoService.postTeste(formulario)
         console.log(dados)
        //console.log(tabelaCobranca)
-       setTabelaCobranca(tabelaCobranca =>[...tabelaCobranca, formulario] )
+       //setTabelaCobranca(tabelaCobranca =>[...tabelaCobranca, formulario] )
 
        //console.log(formulario)
         const {name, value} = e.target;
@@ -130,60 +132,67 @@ export default function AcoesCobrancas(){
     } 
 
     return(
-        <Box justifyContent="space-between" flex={1} border='1px' borderColor='gray.200' p={3}>
-            <form onSubmit={formSubmit}>
-                <Stack direction={['column', 'row']} spacing={5} flex={0.9}>
+        <>
+            <GridCustom cols={3} border={true}>
+                <GridItemCustom>
                     <SelectCustom
                         name='tipoCobranca'
                         label="Tipo:"
                         placeholder="Selecione o tipo"
                         options={tipoCobrancas}
                         onChange={handleForm}
-                        />
+                    />
+                </GridItemCustom>
+                <GridItemCustom>
                     <SelectCustom
                         name='sucessoCobranca'
                         label="Sucesso:"
                         placeholder="Selecione o tipo"
                         options={sucessosCobranca}
                         onChange={handleForm}
-                        />
-                        <InputCustom 
+                    />
+                </GridItemCustom>
+                <GridItemCustom>
+                    <InputCustom 
                         name="dataEnvioCobranca"
                         label="Data do Envio:"
                         type="date"
                         onChange={handleForm}
-                        />
-                </Stack>
-                <Stack direction={['column', 'row']} spacing={5} flex={0.9}>
+                    />
+                </GridItemCustom>
+                
+                <GridItemCustom>
                     <InputCustom 
                         name="responsavelCobranca"
                         label="Responsável:"
                         type="text"
                         onChange={handleForm}
-                        />
+                    />
+                </GridItemCustom>
+                <GridItemCustom>
                     <InputCustom 
                         name="canalCobranca"
                         label="Canal:"
-                        placeholder="nome@dominio"
                         type="text"
                         onChange={handleForm}
                     />
-                        
-                </Stack>
-                <Stack direction={['column', 'row']} spacing='24px' mt={5}> 
+                </GridItemCustom>
+                <GridItemCustom cols={3}>
                     <TextareaCustom    
                         name="observacao"
                         label="Observação" 
                         onChange={handleForm}
-                    />      
-                </Stack>
-                <Stack direction={['column', 'row']} spacing='24px' mt={5} justifyContent="center">
-                    <Button variant='primary' size="md" px={7} leftIcon={<AddIcon />} value="Salvar" type="submit" >
-                        Inserir
-                    </Button>
-                </Stack>
-            </form>
-            <Stack>
+                    />
+                </GridItemCustom>
+
+            </GridCustom>
+            <Stack direction={['column', 'row']} spacing='24px' mt={5} justifyContent="center">
+                <Button variant='primary' size="md" px={7} leftIcon={<AddIcon />} value="Salvar" type="submit" >
+                    Inserir
+                </Button>
+            </Stack>
+
+            <SubBody>
                 {formulario &&
                     <ResponsiveTable 
                     datas={tabelaCobranca} 
@@ -191,10 +200,9 @@ export default function AcoesCobrancas(){
                     viewFunction={viewFunction}
                     deleteFunction={deleteFunction}
                     fieldBody={'id'}
-                />               
-                }
-            </Stack>             
-        </Box>
+                />}
+            </SubBody>
+        </>
     )
 }
 

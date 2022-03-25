@@ -5,7 +5,9 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { InputCustom } from "../../components/Form/Input";
 import { SelectCustom } from "../../components/Form/Select";
+import { GridCustom, GridItemCustom } from "../../components/GridCustom";
 import ResponsiveTable from "../../components/ResponsiveTable";
+import SubBody from "../../components/SubBody";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ProcessoService } from "../../services";
 
@@ -138,46 +140,56 @@ export default function Anexos(props){
     return(
         
         <>  
-            <Flex justifyContent="space-between" flex={1} border='1px' borderColor='gray.200' p={3}> 
-                <Stack direction={['column', 'row']} spacing={5} flex={0.9}>
+            <GridCustom cols={4} border={true}>
+                <GridItemCustom>
                     <SelectCustom
                         name='tipo'
                         label="Tipo:"
                         placeholder="Selecione o tipo"
                         options={tipoAnexo}
                         onChange={insertTipo}
-                        isInvalid = {valido}
+                        //isInvalid = {valido}
                         errorBorderColor='crimson'
-                    /> 
+                    />
+                </GridItemCustom>
+                <GridItemCustom>
                     <SelectCustom 
                         name="origem"
                         label="Origem:"
                         placeholder="Selecione a origem"
                         options={origemAnexo}
                         onChange={enableFile}
-                        isInvalid = {valido}
+                        //isInvalid = {valido}
                         errorBorderColor='crimson'
                     />
-                     <InputCustom 
+                </GridItemCustom>
+                <GridItemCustom>
+                    <InputCustom 
                         name="codigo"
                         label="Código:"
                         value={process['processo']}
                         isDisabled={true}
                     />
-                </Stack>
-                <Flex alignItems="flex-end">
-                    <Button variant='primary' size="lg" onClick={handlerclick} isDisabled={valido}>
+                </GridItemCustom>
+                
+                <GridItemCustom>
+                    <Button w="250px" onClick={handlerclick} isDisabled={valido}>
                         Carregar
                     </Button> 
                     <input type="file"
                         ref={hiddenFileInput}
                         onChange={handleChange}
                         style={{display:'none'}} 
-                    />   
-                </Flex>
-                  
-            </Flex>
-            <Stack>
+                    />
+                </GridItemCustom>
+            </GridCustom>
+            
+            
+            
+            
+            
+            
+            <SubBody>
                 <ResponsiveTable 
                     datas={anexos} 
                     tableConfig={tableConfig} 
@@ -185,21 +197,8 @@ export default function Anexos(props){
                     deleteFunction={deleteFunction}
                     fieldBody={'id'}
                 />               
-            </Stack>
-            <Flex justifyContent="flex-end" flex={1} border='1px' borderColor='gray.200' p={3}> 
-                <Stack spacing={2} direction="row">
-                    <Button variant="success" size="md" leftIcon={<CheckIcon />} onClick={SalvarAnexos} isDisabled={valido}>
-                        Salvar
-                    </Button>
-                    <Button variant="danger" size="md" leftIcon={<RepeatIcon />} onClick={CancelarAnexos} isDisabled={valido}>
-                        Cancelar
-                    </Button>
-                    <Button variant="danger" size="md" leftIcon={<RepeatIcon />} onClick={CancelarAnexos} isDisabled={valido}>
-                        Cancelar
-                    </Button>
-                </Stack>
-                
-            </Flex>
+            </SubBody>
+            
                   
         </>
         
